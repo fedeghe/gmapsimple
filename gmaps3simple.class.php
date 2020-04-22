@@ -1562,20 +1562,14 @@ class gmaps3simple{
 				'.$this->write_circles().'
 				//RECTANGLES
 				'.$this->write_rectangles().'
-					
-
 				//ADD_INNER_DIVS
 				'.$this->write_inner_divs().'
-
 				//USER_SCRIPTS
 				'.$this->write_user_script().'
-					
 				//ZOOM AGAIN
 				'.$this->write_zoom().'
-					
-				//direct
+				//DIRECT MENU
 				'.$this->direct_menu.'
-					
 				//MAY CENTER AFTER GEO
 				'.($this->center_after_geo ? 'window.'.$this->map_id.'='.$this->map_id : '').'
 			  }
