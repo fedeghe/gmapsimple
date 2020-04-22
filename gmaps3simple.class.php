@@ -45,12 +45,12 @@ class gmaps3simple{
 	private $direct_menu = '';
 	
 	
-	private $places_flag=false;
+	private $places_flag = false;
 		
-	private $circles=array();
-	private $rectangles=array();
+	private $circles = array();
+	private $rectangles = array();
 			
-	private $more_scripts=array();
+	private $more_scripts = array();
 			
 			//layers
 	private $traffic_layer,$bike_layer,$panoramio_layer, $flickr_layer;
@@ -59,7 +59,7 @@ class gmaps3simple{
 
 	private $proto = 'http';
 	private $script_hash = array();
-	private $out_style='';
+	private $out_style = '';
 	private $tilt = false;
 	private $map_id;
 	private $map_options;
@@ -82,28 +82,24 @@ class gmaps3simple{
 	
 	
 	//libraries
-	private $load_places=false;
-	
-	
-	// private $base_script = '://maps.googleapis.com/maps/api/js?key=%API_KEY%';
+	private $load_places = false;
+
 	private $base_script = '://maps.googleapis.com/maps/api/js?key=%API_KEY%';
-	const gears_script = 'http://code.google.com/apis/gears/gears_init.js';
-	// private $geo_code = 'http://maps.googleapis.com/maps/api/geocode/json?address=%address%&sensor=false';
-	private $geo_code = 'https://maps.googleapis.com/maps/api/geocode/json?address=%address%&key=%API_KEY%';
-	
+    private $geo_code = 'https://maps.googleapis.com/maps/api/geocode/json?address=%address%&key=%API_KEY%';	
+    private $distance_script = 'https://maps.googleapis.com/maps/api/distancematrix/json?key=%API_KEY%&origins=%FROM%&destinations=%TO%&mode=%MODE%&language=en-EN&sensor=false';
 
 	private $map_genres = array('ROADMAP','SATELLITE','HYBRID','TERRAIN');
 	private $panel_elements = array(
-		'panControl'=>array('show'=>false,'position'=>false),
-		'zoomControl'=>array('show'=>false,'position'=>false,'style'=>false),
-		'mapTypeControl'=>array('show'=>false,'position'=>false,'style'=>false),
-		'scaleControl'=>array('show'=>false,'position'=>false),
-		'streetViewControl'=>array('show'=>false,'position'=>false),
-		'overviewMapControl'=>array('show'=>false, 'opened'=>false),
-		'navigationControl'=>array('show'=>false, 'style'=>false),
+		'panControl' => array('show' => false, 'position' => false),
+		'zoomControl' => array('show' => false, 'position'=>false, 'style' => false),
+		'mapTypeControl' => array('show' => false, 'position'=>false,'style' => false),
+		'scaleControl' => array('show' => false, 'position' => false),
+		'streetViewControl' => array('show' => false,'position' => false),
+		'overviewMapControl' => array('show' => false, 'opened' => false),
+		'navigationControl' => array('show' => false, 'style' => false),
 		
 	);
-	private $panel_positions=array(
+	private $panel_positions = array(
 		'TOP_LEFT', 'TOP_CENTER', 'TOP_RIGHT',
 		'LEFT_TOP', 'RIGHT_TOP',
 		'LEFT_CENTER', 'RIGHT_CENTER',
@@ -125,13 +121,13 @@ class gmaps3simple{
 	 * 
 	 * @var array
 	 */
-	private $hash_defaults=array(
-		'sensor'=>false,
-		'region'=>false
+	private $hash_defaults = array(
+		'sensor' => false,
+		'region' => false
 	);
 	
-	private $MapTypeStyleFeatureType=array(
-		'administrative'=>array( //	Apply the rule to administrative areas
+	private $MapTypeStyleFeatureType = array(
+		'administrative' => array( //	Apply the rule to administrative areas
 			'country',		// Apply the rule to countries.
 			'land_parcel',	// Apply the rule to land parcels.
 			'locality',		// Apply the rule to localities.
@@ -139,11 +135,11 @@ class gmaps3simple{
 			'province'		// Apply the rule to provinces.
 		),
 		'all',			//Apply the rule to all selector types.
-		'landscape'=>array(	//Apply the rule to landscapes.
+		'landscape' => array(	//Apply the rule to landscapes.
 			'man_made',		//Apply the rule to man made structures.
 			'natural'		//Apply the rule to natural features.
 		),
-		'poi'=>array(	//Apply the rule to points of interest.
+		'poi' => array(	//Apply the rule to points of interest.
 			'attraction',	//Apply the rule to attractions for tourists.
 			'business',		//Apply the rule to businesses.
 			'government',	//Apply the rule to government buildings.
@@ -153,14 +149,14 @@ class gmaps3simple{
 			'school',	//Apply the rule to schools.
 			'sports_complex'	//Apply the rule to sports complexes.
 		),
-		'road'=>array(	// 	Apply the rule to all roads.
+		'road' => array(	// 	Apply the rule to all roads.
 			'arterial',	//	Apply the rule to arterial roads.
 			'highway',	//	Apply the rule to highways.
 			'local'	//	Apply the rule to local roads.
 		),
-		'transit'=>array(// 	Apply the rule to all transit stations and lines.
+		'transit' => array(// 	Apply the rule to all transit stations and lines.
 			'line',	// 	Apply the rule to transit lines.
-			'station'=>array( //Apply the rule to all transit stations.
+			'station' => array( //Apply the rule to all transit stations.
 				'airport', //Apply the rule to airports.
 				'bus', //	Apply the rule to bus stops.
 				'rail'// 	Apply the rule to rail stations.
@@ -171,19 +167,15 @@ class gmaps3simple{
 	private $MapTypeStyleElementType = array('all', 'geometry', 'labels');
 	
 	private $helper_functions = array(
-		
-		'place_marker'=>'function placeMarker(location) {
+		'place_marker' => 'function placeMarker(location) {
 			var marker = new google.maps.Marker({
 				position: location, 
 				map: %map%
 			});
 			return marker;
 		};',
-		
-		'center_and_zoom'=>'
-			
-		',
-		'reverseGC'=>'
+		'center_and_zoom' => '',
+		'reverseGC' => '
 			var geocoder = new google.maps.Geocoder();
 			function reverse(lat, lon, win){
 				geocoder.geocode(
@@ -206,7 +198,7 @@ class gmaps3simple{
 					}
 				);
 			};',
-		'elevation'=>'
+		'elevation' => '
 			function elevation(lat, lon, win) {
 				var elevator = elevator = new google.maps.ElevationService();
 				var locations = [];
@@ -240,84 +232,66 @@ class gmaps3simple{
 					}
 				);
 			}
-		'
-		
-	);
-
+		');
 	
 	//some lib flag
-	private $loaded_libs=array();
-	
+	private $loaded_libs = array();
 	
 	//check cache?
-	private $cache=false;
-	private $may_cache_file=false;
-	private $cached_file_content=false;
+	private $cache = false;
+	private $may_cache_file = false;
+	private $cached_file_content = false;
 	
 	//set it manually
 	private $use_jQuery = false;
-	
-	/**
-	 * for using geometry functions, like distance, area, etc, add 'geometry' to the libraries hash parameter
-	 * 
-	 * 
-	 * @param type $options 
-	 * 
-	 */
+
 	private function check_cache(){
 		$bt = debug_backtrace();
-		if(defined(MAJORANA)){
-			$this->may_cache_file = PATH_CACHE.'cache.'.__CLASS__.'.'.crc32(file_get_contents($bt[2]['file'])).'.html';
-		}else{
-			$this->may_cache_file = realpath(dirname(__FILE__)).'/cache.'.__CLASS__.'.'.crc32(file_get_contents($bt[1]['file'])).'.html';
-		}
-		if(file_exists($this->may_cache_file)){
+		$this->may_cache_file = realpath(dirname(__FILE__)).'/cache.'.__CLASS__.'.'.crc32(file_get_contents($bt[1]['file'])).'.html';
+		if (file_exists($this->may_cache_file)) {
 			$this->cached_file_content = file_get_contents( $this->may_cache_file) ;
 		}
-	}
-	public function __construct($options=false){
-		
-		if(array_key_exists('cache', $options) && $options['cache']){
+    }
+    
+	public function __construct($options = false){	
+		if (array_key_exists('cache', $options) && $options['cache']) {
 			$this->cache = true;
 			$this->check_cache();
-			if($this->cached_file_content)return true;
+			if ($this->cached_file_content)return true;
 		}
-		
 		
 		$this->map_id = $options['id'];
 		
-		if(array_key_exists('jQuery', $options))$this->use_jQuery = is_bool($options['jQuery'])?$options['jQuery'] : false;
+		if (array_key_exists('jQuery', $options)) $this->use_jQuery = is_bool($options['jQuery']) ? $options['jQuery'] : false;
 		
-		if(array_key_exists('tilt', $options))$this->tilt = ($options['tilt']==45)?45:0;
+		if (array_key_exists('tilt', $options)) $this->tilt = ($options['tilt'] == 45) ? 45 : 0;
 		//if(array_key_exists('libraries', $options) && array_key_exists('places', $options['libraries']))$this->load_places = true;
 		
 		$this->out_style = html::esplicit_script('#'.$this->map_id.' { height: 100% }', 'css');
 		
 		//set map options
-		$this->map_options = array_key_exists('options', $options)? $options['options'] : array();
+		$this->map_options = array_key_exists('options', $options) ? $options['options'] : array();
 		
-		$this->map_styles = array_key_exists('styles', $options)? $options['styles'] : array();
+		$this->map_styles = array_key_exists('styles', $options) ? $options['styles'] : array();
 		
 		$this->script_hash = $this->hash_defaults;
 		
-		if(array_key_exists('hash', $options) && is_array($options['hash'])){
-			foreach($options['hash'] as $k => $v) $this->script_hash[$k] = $v;
-			foreach($this->hash_defaults as $k => $v)
-				if(!array_key_exists($k, $this->script_hash))$this->script_hash[$k] = $v;
+		if (array_key_exists('hash', $options) && is_array($options['hash'])) {
+			foreach ($options['hash'] as $k => $v) $this->script_hash[$k] = $v;
+			foreach ($this->hash_defaults as $k => $v)
+                if (!array_key_exists($k, $this->script_hash))
+                    $this->script_hash[$k] = $v;
 		}
-		
-		
+
 		//check center user will
-		if($this->script_hash['sensor'] =='center'){
+		if ($this->script_hash['sensor'] == 'center') {
 			$this->center_after_geo = true;
 		}
 		//rewrite sensor to string
-		$this->script_hash['sensor'] = $this->script_hash['sensor']?'true':'false';
+		$this->script_hash['sensor'] = $this->script_hash['sensor'] ? 'true' : 'false';
 		
-		
-		$this->loaded_libs = array_key_exists('libraries', $this->script_hash)? $this->script_hash['libraries'] : array();
-		
-		
+		$this->loaded_libs = array_key_exists('libraries', $this->script_hash) ? $this->script_hash['libraries'] : array();
+
 		$this->tmp_arr = array();
 		$this->tmp_var = NULL;
 		
@@ -333,16 +307,17 @@ class gmaps3simple{
     public function set_api_key($ak) {
         $this->api_key = $ak;
         $this->base_script = str_replace('%API_KEY%', $this->api_key, $this->base_script);
+        $this->distance_script = str_replace('%API_KEY%', $this->api_key, $this->distance_script);
         return $this;
     }
 	
 	public function set_size($w, $h){
 		$this->width = $w;
 		$this->height = $h;
-		if($this->cached_file_content)return;
-		if($this->use_jQuery){
+		if ($this->cached_file_content) return;
+		if ($this->use_jQuery) {
 			$this->add_user_script("jQuery('#".$this->map_id."').css({width:'".$w."px', height:'".$h."px'});");
-		}else{
+		} else {
 			$this->add_user_script("
 				var el = document.getElementById('".$this->map_id."'); el.style.width='".$w."px'; el.style.height='".$h."px';
 			");
@@ -350,38 +325,37 @@ class gmaps3simple{
 		return $this;
 	}
 	
-	public function set_map_genre($genre){
-		if($this->cached_file_content)return;
-		if(in_array($genre, $this->map_genres))$this->map_genre = $genre;
+	public function set_map_genre($genre) {
+		if ($this->cached_file_content) return;
+		if (in_array($genre, $this->map_genres)) $this->map_genre = $genre;
 		return $this;
 	}
 	
-	//set protocol
-	public function set_protocol($p){
-		if($this->cached_file_content)return;
-		if(in_array($p,array('http','https')))$this->proto = $p;
+	public function set_protocol($p) {
+		if ($this->cached_file_content) return;
+		if (in_array($p,array('http','https'))) $this->proto = $p;
 		return $this;
 	}
 	
 
-	public function center_point($arr){
-		if($this->cached_file_content)return;
-		if(!is_array($arr))$arr = $this->address2coords ($arr);
+	public function center_point($arr) {
+		if ($this->cached_file_content) return;
+		if (!is_array($arr)) $arr = $this->address2coords ($arr);
 		
-		$this->center_point = 'new google.maps.LatLng('.$arr['lat'].','.$arr['lon'].')';//array('lat'=>$arr['lat'], 'lon'=>$arr['lon']);
+		$this->center_point = 'new google.maps.LatLng('.$arr['lat'].','.$arr['lon'].')';
 		return $this;
 	}
 	
 	public function get_center_point(){	return $this->center_point;	}
 	
 	public function set_zoom_level($i){
-		if($this->cached_file_content)return;
-		if(is_int($i))$this->zoom_level = intval($i);
+		if ($this->cached_file_content) return;
+		if (is_int($i)) $this->zoom_level = intval($i);
 		return $this;
 	}
 	
 	public function edit_panel($p){
-		if($this->cached_file_content)return;
+		if ($this->cached_file_content) return;
 		/*
 		'panControl'=>array('show'=>false,'position'=>false),
 		'zoomControl'=>array('show'=>false,'position'=>false,'style'=>false),
@@ -390,46 +364,41 @@ class gmaps3simple{
 		'streetViewControl'=>array('show'=>false,'position'=>false),
 		'overviewMapControl'=>array('show'=>false,'position'=>false)
 		*/
-		foreach($p as $name => $opt){
+		foreach ($p as $name => $opt) {
 			
-			if(array_key_exists($name, $this->panel_elements)){
-				
+			if (array_key_exists($name, $this->panel_elements)) {
 				$this->panel_elements[$name]['show'] = $opt['show'];
-				
-				if(array_key_exists('position', $opt) && $opt['position'] && in_array($opt['position'], $this->panel_positions)){
+				if (array_key_exists('position', $opt) && $opt['position'] && in_array($opt['position'], $this->panel_positions)) {
 					$this->panel_elements[$name]['position'] = 'google.maps.ControlPosition.'.$opt['position'];
 				}
-				switch($name){
+				switch($name) {
 					case 'mapTypeControl':
-						if(array_key_exists('style', $opt) && in_array($opt['style'], array('HORIZONTAL_BAR','DROPDOWN_MENU','DEFAULT')))
+						if (array_key_exists('style', $opt) && in_array($opt['style'], array('HORIZONTAL_BAR','DROPDOWN_MENU','DEFAULT')))
 							$this->panel_elements[$name]['style'] = 'google.maps.MapTypeControlStyle.'.$opt['style'];
 					break;
 					case 'zoomControl':
-						if(array_key_exists('style', $opt) && in_array($opt['style'], array('SMALL','LARGE','DEFAULT')))
+						if (array_key_exists('style', $opt) && in_array($opt['style'], array('SMALL','LARGE','DEFAULT')))
 							$this->panel_elements[$name]['style'] = 'google.maps.ZoomControlStyle.'.$opt['style'];
 					break;
 					case 'overviewMapControl':
-						if(array_key_exists('opened', $opt) && $opt['opened'])
+						if (array_key_exists('opened', $opt) && $opt['opened'])
 							$this->panel_elements[$name]['opened'] = $opt['opened']?'true':'false';
 					break;
 					case 'navigationControl':
-						if(array_key_exists('style', $opt) && in_array($opt['style'], array('SMALL','DEFAULT')) )
+						if (array_key_exists('style', $opt) && in_array($opt['style'], array('SMALL','DEFAULT')) )
 							$this->panel_elements[$name]['style'] = 'google.maps.NavigationControlStyle.'.$opt['style'];
 					break;
 					default:break;
 				}
-				
 			}
-			
 		}
 		return $this;
 	}
 
 	///content will not be parsed
-	public function add_inner_div($id, $style=false, $hidden=false, $content=false){
-		if($style)$style['position']='absolute';
+	public function add_inner_div($id, $style = false, $hidden = false, $content = false){
+		if ($style) $style['position'] = 'absolute';
 		$this->inner_divs[$id] = array(
-			//'tag'=>html::tag('div',false,array('id'=>$id, 'style'=>arr::assoc2style($style) )),
 			'id'=>$id,
 			'style'=>$style,
 			'hidden'=>$hidden,
@@ -682,24 +651,22 @@ class gmaps3simple{
 	
 	// removes a point
 	public function remove_point($name){
-		if($this->cached_file_content)return;
-		if(array_key_exists($name, $this->points))
+		if ($this->cached_file_content) return;
+		if (array_key_exists($name, $this->points))
 			unset($this->points[$name]);
 		return $this;
 	}
-	
-	
 
-	
 	public function limit_baloons_to($num = 1){
 		if($this->cached_file_content)return;
 		$this->only_one_baloon = $num;
 		return $this;
 	}
-	private function write_one_baloon(){
-		if($this->cached_file_content)return;
-		if($this->only_one_baloon){
-			$js='
+    
+    private function write_one_baloon(){
+		if ($this->cached_file_content) return;
+		if ($this->only_one_baloon) {
+			return '
 				var opened_baloons = new Array();
 				function swap_baloons(){
 					for(var i =0, len=opened_baloons.length; i<len-'.intval($this->only_one_baloon).';i++){
@@ -707,8 +674,7 @@ class gmaps3simple{
 						if(typeof shif !==\'undefined\'){shif.close();}
 					}
 					
-					var max_zindex=0;
-					var len = 0;
+					var max_zindex=0, len = 0;
 					for(var i =0, len=opened_baloons.length; i<len;i++){
 						var zindex = opened_baloons[i].getZIndex();
 						if(max_zindex < zindex){max_zindex = zindex;}
@@ -729,27 +695,22 @@ class gmaps3simple{
 					return true;
 				}
 			';
-			return $js;//'var opened_baloon = false;';
 		}
 	}
 	
-	
-	
 	public function add_circle($circle){
-		if($this->cached_file_content)return;
+		if ($this->cached_file_content) return;
 		$this->circles[] = $circle;
 		return $this;
-	}
+    }
+    
 	public function add_rectangle($rectangle){
-		if($this->cached_file_content)return;
+		if ($this->cached_file_content) return;
 		$this->rectangles[] = $rectangle;
 		return $this;
 	}
 	
 
-	
-	
-	
 	
 	
 	
@@ -793,24 +754,21 @@ class gmaps3simple{
 	 */
 	private function write_circles(){
 		if($this->cached_file_content)return;
-		$js='';
+		$js = '';
 		
 		//loop on booked elements
 		foreach($this->circles as $k => $circle){
 			
 			//center is mandatory
-			$center= '';
 			$center = $this->param2coords($circle['center']);
-			
-			
-			
+		
 			$radius = (array_key_exists('radius', $circle)?$circle['radius']:'100');
 			$js.='var circle_'.$k.' = new google.maps.Circle({
-				strokeColor: "'.(array_key_exists('strokeColor', $circle)?$circle['strokeColor']:'#FF0000').'",
-				strokeOpacity: '.(array_key_exists('strokeOpacity', $circle)?$circle['strokeOpacity']:'0.8').',
-				strokeWeight: '.(array_key_exists('strokeWeight', $circle)?$circle['strokeWeight']:'2').',
-				fillColor: "'.(array_key_exists('fillColor', $circle)?$circle['fillColor']:'#FF0000').'",
-				fillOpacity: '.(array_key_exists('fillOpacity', $circle)?$circle['fillOpacity']:'0.35').',
+				strokeColor: "'.(array_key_exists('strokeColor', $circle) ? $circle['strokeColor'] : '#FF0000').'",
+				strokeOpacity: '.(array_key_exists('strokeOpacity', $circle) ? $circle['strokeOpacity'] : '0.8').',
+				strokeWeight: '.(array_key_exists('strokeWeight', $circle) ? $circle['strokeWeight'] : '2').',
+				fillColor: "'.(array_key_exists('fillColor', $circle) ? $circle['fillColor'] : '#FF0000').'",
+				fillOpacity: '.(array_key_exists('fillOpacity', $circle) ? $circle['fillOpacity'] : '0.35').',
 				map: '.$this->map_id.',
 				center: '.$center.',
 				radius: '.$radius.'
@@ -825,15 +783,9 @@ class gmaps3simple{
 				);
 			';
 			
-			
 			//maybe inner baloon
 			if(array_key_exists('in_baloon', $circle)){
-				$in_baloon = $circle['in_baloon'];
-				
-				//$in_baloon = str_replace('%AREA%',   , $in_baloon);
-				
-				
-				
+				$in_baloon = $circle['in_baloon'];				
 				$js.='
 				google.maps.event.addListener(circle_'.$k.', \'click\',
 					function (event) {
@@ -850,11 +802,6 @@ class gmaps3simple{
 						'.( $this->write_center_on_click('event.latLng') ).'
 						circ_infowindow_'.$k.'.setPosition(event.latLng);
 						circ_infowindow_'.$k.'.setContent(in_baloon);
-							
-						
-						
-						//////////
-						
 					}
 				);
 				var circ_infowindow_'.$k.' = new google.maps.InfoWindow();
@@ -1858,12 +1805,17 @@ class gmaps3simple{
 		
 		$m = in_array($mode,array('driving','walking','bicycling')) ? $mode : 'bicycling';
 		
-		$req='http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$from.'&destinations='.$to.'&mode='.$mode.'&language=en-EN&sensor=false';
+		$req = str_replace(
+            array('%FROM%', '%TO%', '%MODE%'),
+            array($from, $to, $mode),
+            $this->distance_script
+        );
 		$tmp = array();
-		$ret = curl::get($req);
+        $ret = curl::get($req);
+        echo $ret;
 		$res = json_decode($ret, true);
 		$return = array('distance'=>0, 'duration'=>0);
-		if($res['status']==='OK'){
+		if ($res['status']==='OK'){
 			$return['distance'] = $res['rows'][0]['elements'][0]['distance']['value'];
 			$return['duration'] = $res['rows'][0]['elements'][0]['duration']['value'];
 			return $return;
