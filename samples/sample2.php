@@ -36,7 +36,7 @@ $gmaps->add_point(
 	\'padova\', // just a label , not so important, but be careful : must be unique
 	\'padova\', // used for localization, here you can pass even an array(\'lat\'=>value, \'lon\'=>value)
 	array( // the whole array is optional
-		\'baloon\'=>\'<div>Latitude: %LAT% <br /> Longitude: %LON%</div>\',
+		\'baloon\'=>\'<div>Latitude: %LAT% <br /> Longitude: %LON% <br /> Elevation: %ELEVATION%</div>\',
 		\'zindex\'=>3,
 		\'title\'=>\'just the title\',
 	)
@@ -64,7 +64,7 @@ $gmaps->add_point(
 	'padova',
 	'padova',
 	array(
-		'baloon'=>'<div>Latitude: %LAT% <br /> Longitude: %LON%<br />Elevation:%ELEVATION%</div> ',
+		'baloon'=>'<div>Latitude: %LAT% <br /> Longitude: %LON%<br />Elevation: %ELEVATION%</div> ',
 		'zindex'=>3,
 		'title'=>'just the title',
 	)

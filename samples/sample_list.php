@@ -37,8 +37,9 @@ $sel =false;
 $i = 0;
 $prev = false;
 $next = false;
+
 foreach($pages as $label => $url){
-	$s = ((!$sel && $url==$_SERVER['SCRIPT_URI']) && $sel=true)? ' selected="selected"':false;
+	$s = ((!$sel && $url==$_SERVER['SCRIPT_NAME']) && $sel=true)? ' selected="selected"':false;
 	$select.='<option value="'.$url.'"'.$s.'>'.$label.'</option>';
 	if($s){
 		$urls = array_values($labels);

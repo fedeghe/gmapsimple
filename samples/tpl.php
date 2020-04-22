@@ -44,7 +44,7 @@ include(\'gmaps3simple.class.php\');
 		
 		<div class="clearer">&nbsp;</div>
 		
-		<?php echo isSet($after)?$after:''; ?> 
+		<?php echo isSet($after) ? $after : ''; ?> 
 		<div id="directions-panel"></div>
 		<hr />
 		

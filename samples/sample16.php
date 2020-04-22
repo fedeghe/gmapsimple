@@ -16,7 +16,7 @@ $gmaps->center_point(\'Padova, Italia\');
 
 $gmaps->set_size(500, 400);
 
-$gmaps->set_zoom_level(7);   dsdsdfsdf                      
+$gmaps->set_zoom_level(7);                
 
 echo $gmaps->render();	
 ';

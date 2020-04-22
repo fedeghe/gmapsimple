@@ -1812,7 +1812,7 @@ class gmaps3simple{
         );
 		$tmp = array();
         $ret = curl::get($req);
-        echo $ret;
+
 		$res = json_decode($ret, true);
 		$return = array('distance'=>0, 'duration'=>0);
 		if ($res['status']==='OK'){
@@ -1823,15 +1823,11 @@ class gmaps3simple{
 		return false;
 	}
 	
-	
-	
-	
 	/**
 	 *
 	 * @param type $path_points array of point as in add_point array(name, coords, opts)
 	 * @param type $style 
 	 */
-	
 	public function add_polyline($polyline_points, $style){
 		if($this->cached_file_content)return;
 		$path = array(
@@ -1859,34 +1855,27 @@ class gmaps3simple{
 	public function add_route($from, $to, $opts=array()){
 		if($this->cached_file_content)return;
 		
-		$way_points = (array_key_exists('way_points', $opts) && is_array($opts['way_points'])) ? $opts['way_points']:false;
+		$way_points = (array_key_exists('way_points', $opts) && is_array($opts['way_points'])) ? $opts['way_points'] : false;
 		
-		$avoids = (array_key_exists('avoids', $opts) && is_array($opts['avoids'])) ? $opts['avoids']:false;
+		$avoids = (array_key_exists('avoids', $opts) && is_array($opts['avoids'])) ? $opts['avoids'] : false;
 		
-		$polyOpts = array_key_exists('stroke', $opts) ? ', polylineOptions: '.arr::assoc2json($opts['stroke']).' ': false;
+		$polyOpts = array_key_exists('stroke', $opts) ? ', polylineOptions: '.arr::assoc2json($opts['stroke']).' ' : false;
 		
+		$provideRouteAlternatives = array_key_exists('provideRouteAlternatives', $opts) ? $opts['provideRouteAlternatives']  :false;
 		
-		
-		$provideRouteAlternatives = array_key_exists('provideRouteAlternatives', $opts)? $opts['provideRouteAlternatives']:false;
-		
-		if(is_array($way_points)){
+		if (is_array($way_points)) {
 			$wp = array();
-			foreach($opts['way_points'] as $w){
-				$wp[] = '{location: "'.$w.'", stopover:false}';
+			foreach( $opts['way_points'] as $w) {
+				$wp[] = '{location: "' . $w . '", stopover:false}';
 			}
-			$way_points = '['.implode(',', $wp).']';
+			$way_points = '[' . implode(',', $wp) . ']';
 		}
 		
 		$mode = array_key_exists('mode', $opts) ? $opts['mode'] : 'DRIVING';
 		
 		$show_steps = array_key_exists('show_steps', $opts) ? $opts['show_steps'] : false;
 		
-		
 		$drag_directions = array_key_exists('draggable_points', $opts) ? $opts['draggable_points'] : false;;
-		
-		
-		
-		
 		
 		if(!in_array($mode, array('DRIVING','WALKING','BICYCLING')))$mode = 'DRIVING';
 		
@@ -1894,19 +1883,15 @@ class gmaps3simple{
 		$next_index = count($this->routes);
 		
 		$scr.='
-		
 
 		var directionsDisplay_'.$next_index.';
 		directionsDisplay_'.$next_index.'= new google.maps.DirectionsRenderer('.($drag_directions?'{draggable: true'.$polyOpts.'}':'').');
 		directionsDisplay_'.$next_index.'.setMap('.$this->map_id.');
 		
-
 		'.($this->routes_panel ? 'directionsDisplay_'.$next_index.'.setPanel(document.getElementById("'.$this->routes_panel .'"));' : '').'
-		
 		
 		'.($show_steps?'var stepDisplay = new google.maps.InfoWindow(); var markerArray = [];':'').'
 		 
-
 		var route_'.$next_index.' = {
 			origin:"'.$from.'",
 			destination:"'.$to.'",
@@ -1927,30 +1912,25 @@ class gmaps3simple{
 				}
 			}
 		);';
-		if($show_steps){
-			$scr.='	
+		if ($show_steps) {
+			$scr .= '	
 			function showSteps(directionResult) {
-			  var myRoute = directionResult.routes[0].legs[0];
-
-			  for (var i = 0; i < myRoute.steps.length; i++) {
-				  var marker = new google.maps.Marker({
-					position: myRoute.steps[i].start_point,
-					map: '.$this->map_id.'
-				  });
-				  attachInstructionText(marker, myRoute.steps[i].instructions);
-				  markerArray[i] = marker;
-			  }
-			  
-			  
-			}
-
+                var myRoute = directionResult.routes[0].legs[0];
+                for (var i = 0; i < myRoute.steps.length; i++) {
+                    var marker = new google.maps.Marker({
+                        position: myRoute.steps[i].start_point,
+                        map: ' . $this->map_id . '
+                    });
+                    attachInstructionText(marker, myRoute.steps[i].instructions);
+                    markerArray[i] = marker;
+                }
+            }
 			function attachInstructionText(marker, text) {
-			  google.maps.event.addListener(marker, \'click\', function() {
-				stepDisplay.setContent(text);
-				stepDisplay.open('.$this->map_id.', marker);
-			  });
-			}
-			
+                google.maps.event.addListener(marker, \'click\', function() {
+                    stepDisplay.setContent(text);
+                    stepDisplay.open('.$this->map_id.', marker);
+                });
+            }
 			';
 		}
 		$this->routes[] = $scr;
@@ -1959,31 +1939,31 @@ class gmaps3simple{
 
 	
 	
-	public function add_polygon($path_points, $style, $in_baloon=false){
-		if($this->cached_file_content)return;
+	public function add_polygon($path_points, $style, $in_baloon = false) {
+		if ($this->cached_file_content) return;
 		$path = array(
-			'style'=>$style,
-			'in_baloon'=>$in_baloon
+			'style' => $style,
+			'in_baloon' => $in_baloon
 		);
-		foreach($path_points as $point){
+		foreach ($path_points as $point) {
 			$name = $point[0];
 			$address_or_coords = $point[1];
 			$opts = $point[2];
 			
-			if(!is_array($address_or_coords))$address_or_coords = $this->address2coords($address_or_coords);
-			$path[] = array('name'=>$name, 'coords'=>$address_or_coords, 'opts'=>$opts);
+			if (!is_array($address_or_coords)) $address_or_coords = $this->address2coords($address_or_coords);
+			$path[] = array(
+                'name' => $name,
+                'coords' => $address_or_coords,
+                'opts' => $opts
+            );
 		}
 		$this->polygons[] = $path;
 		return $this;
 	}
 	
-
-	
-	
 	//can be called only once
-	public function view_places($places, $location, $radius, $baloon="%name%"){
-		if($this->cached_file_content)return;
-		if($this->places_flag)return;
+	public function view_places($places, $location, $radius, $baloon = "%name%"){
+		if ($this->cached_file_content || $this->places_flag) return;
 		
 		$this->places = array(
 			'types'=>array(),
@@ -1991,67 +1971,52 @@ class gmaps3simple{
 			'radius'=>$radius,
 			'baloon'=>$baloon
 		);
-		foreach($places as $p)$this->places['types'][] = $p;
-		$this->places_flag = '
-					var service;
-					service = new google.maps.places.PlacesService('.$this->map_id.');
-					 
-					function places_callback(results, status) {
-						if (status == google.maps.places.PlacesServiceStatus.OK) {
-							for (var i = 0; i < results.length; i++) {
-								var place = results[i];
-								
-								
-								var request = {	reference: results[i].reference };
-								var infowindow = new google.maps.InfoWindow();
+		foreach ($places as $p) $this->places['types'][] = $p;
+        $this->places_flag = '
+            var service = new google.maps.places.PlacesService(' . $this->map_id . ');
 
+            function places_callback(results, status) {
+                if (status == google.maps.places.PlacesServiceStatus.OK) {
+                    for (var i = 0, l = results.length; i < l; i++) {
+                        var place = results[i],
+                            request = {	reference: results[i].reference },
+                            infowindow = new google.maps.InfoWindow();
+                        service.getDetails(request, function(details, status) {
+                            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                                var marker = new google.maps.Marker({
+                                    map: '.$this->map_id.',
+                                    position: details.geometry.location
+                                });
 
-								 service.getDetails(request, function(details, status) {
-								  if (status == google.maps.places.PlacesServiceStatus.OK) {
-									var marker = new google.maps.Marker({
-									  map: '.$this->map_id.',
-									  position: details.geometry.location
-									});
-									
-									
-
-									var content = \''.$this->places['baloon'].'\'.replace("%name%",details.name)
-									   .replace("%rating%",details.rating)
-									   .replace("%url%",details.url)
-									   .replace("%website%",details.website)
-									   .replace("%html_attributions%",details.html_attributions)
-									   .replace("%formatted_phone_number%",details.formatted_phone_number)
-									   .replace("%formatted_address%",details.formatted_address)									   
-									   .replace("%types%",details.types.join(", "));
-									   
-									google.maps.event.addListener(marker, \'click\', function() {
-									  infowindow.setContent(content);
-									  infowindow.open('.$this->map_id.', this);
-									});
-								  }
-								});
-
-
-								
-								//alert(results[i].reference);
-							}
-						}
-					}
+                                var content = \''.$this->places['baloon'].'\'
+                                    .replace("%name%", details.name)
+                                    .replace("%rating%", details.rating)
+									.replace("%url%", details.url)
+									.replace("%website%", details.website)
+									.replace("%html_attributions%", details.html_attributions)
+									.replace("%formatted_phone_number%", details.formatted_phone_number)
+									.replace("%formatted_address%", details.formatted_address)									   
+                                    .replace("%types%", details.types.join(", "));
+                                
+                                google.maps.event.addListener(marker, \'click\', function() {
+                                    infowindow.setContent(content);
+                                    infowindow.open('.$this->map_id.', this);
+                                });
+                            }
+                        });
+                    }
+                }
+            }
+            var request = {
+                location: new google.maps.LatLng(%PLAT%, %PLON%),
+                radius: \''.$this->places['radius'].'\'
+				'.$this->write_places().'
+			};
 					
-					var request = {
-						location: new google.maps.LatLng(%PLAT%, %PLON%),
-						radius: \''.$this->places['radius'].'\'
-						'.$this->write_places().'
-					};
-					
-					
-					
-					infowindow = new google.maps.InfoWindow();
-
-					service.search(request, places_callback);
-					
-	
-				';
+		    // infowindow = new google.maps.InfoWindow();
+            service.search(request, places_callback);
+		
+		';
 		
 		return $this;
 	}
@@ -2063,40 +2028,20 @@ class gmaps3simple{
 	// 
 	// add a inner helper
 	public function add_helper($helpers){
-		if($this->cached_file_content)return;
-		if(is_array($helpers)){
-			foreach($helpers as $helper)$this->add_helper($helper);
+		if ($this->cached_file_content) return;
+		if (is_array($helpers)) {
+			foreach ($helpers as $helper) $this->add_helper($helper);
 			return;
 		}
-		if(array_key_exists($helpers, $this->helper_functions) && !in_array($helpers, $this->helpers) )$this->helpers[] = $helpers;
+		if (array_key_exists($helpers, $this->helper_functions) && !in_array($helpers, $this->helpers)) $this->helpers[] = $helpers;
 		return $this;
 	}
 	// remove a inner helper
-	public function remove_helper($helper){
-		if($this->cached_file_content)return;
-		if(in_array($helper, $this->helpers))unset($this->helpers[$helper]);
+	public function remove_helper($helper) {
+		if ($this->cached_file_content) return;
+		if (in_array($helper, $this->helpers)) unset($this->helpers[$helper]);
 		return $this;
-	}
-
-
-	
-	
-	
-	
-	/*****************************************************/
-	/*****************************************************/
-	/*****************************************************/
-
-	/*****************************************************/
-	/*****************************************************/
-	/*****************************************************/
-	
-	
-	
-	
-	
-	
-
+    }
 	
 	public function render(){
 		if($this->cached_file_content)return $this->cached_file_content;
@@ -2106,24 +2051,22 @@ class gmaps3simple{
 		$out = $this->out_style;
 		
 		//remove fase hashes
-		foreach($this->script_hash as $k => $s)if($s==false)unset($this->script_hash[$k]);
+        foreach ($this->script_hash as $k => $s)
+            if ($s==false)
+                unset($this->script_hash[$k]);
 		
 		
 		
 		
-		if(array_key_exists('libraries', $this->script_hash)){ 
-            $this->script_hash['libraries']= implode(',', $this->script_hash['libraries']);
-        }
+		if (array_key_exists('libraries', $this->script_hash)) 
+            $this->script_hash['libraries'] = implode(',', $this->script_hash['libraries']);
         
 		$out.= html::implicit_script($this->proto . $this->base_script . arr::arr2get($this->script_hash));
-		
-		
-		
 		$out.= html::esplicit_script($this->out_js, 'js');
 		
-		if($this->use_jQuery){
+		if ($this->use_jQuery) {
 			$out.= html::esplicit_script('jQuery(function(){initialize();});', 'js');
-		}else{
+		} else {
 			
 			$j='if (window.addEventListener) { 
 				window.addEventListener(\'load\', initialize, false); 
@@ -2135,14 +2078,11 @@ class gmaps3simple{
 		}
 		
 		$this->out_js = NULL;
-		if($this->cache)file_put_contents($this->may_cache_file, $out);
+        if ($this->cache)
+            file_put_contents($this->may_cache_file, $out);
 		
 		return $out;
 	}
-	
-	
-
-		
 }
 
 
@@ -2160,23 +2100,15 @@ class arr{
 	 * 	questo per rendere molto difficile che un uente metta in blacklist un altro utente tramite url)
 	 */
 	public static function arr2get($par=null, $md = FALSE, $straight = TRUE) {
-
-		if( !is_null($par) ){
-
-		    $params = '';
-		    $i = 0;
-
-		    foreach ($par as $k => $p) {
-				$val = ($md) ? md5($p) : $p;
-				$params.= ( $straight ? '&' : (($i == 0) ? '?' : '&')) . "$k=$val";
-				$i++;
-		    }
-
-		    return $params;
-
-		} else {
-		    return '';
-		}
+        if (is_null($par)) return;
+        $params = '';
+        $i = 0;
+        foreach ($par as $k => $p) {
+            $val = ($md) ? md5($p) : $p;
+            $params.= ( $straight ? '&' : (($i == 0) ? '?' : '&')) . "$k=$val";
+            $i++;
+        }
+        return $params;
 	}
 	
 
@@ -2188,11 +2120,11 @@ class arr{
 	 */
 	public static function assoc2attrib($opt){
 		$out = ' ';
-		if(is_array($opt) && count($opt) > 0){
-			foreach($opt as $k => $val)
-				$out .= $k.'="'.$val.'" ';
+		if (is_array($opt) && count($opt) > 0) {
+			foreach ($opt as $k => $val)
+				$out .= $k . '="' . $val . '" ';
 		}
-		return ($out==' ')?'':$out;
+		return ($out == ' ') ? '' : $out;
 	}
 	
 	
@@ -2206,11 +2138,11 @@ class arr{
 	 */
 	public static function assoc2style($opt){
 		$out = ' ';
-		if(is_array($opt) && count($opt) > 0){
-			foreach($opt as $k => $val)
-				$out .= $k.':'.$val.';';
+		if (is_array($opt) && count($opt) > 0) {
+			foreach ($opt as $k => $val)
+				$out .= $k . ':' . $val . ';';
 		}
-		return ($out==' ')?'':$out;
+		return ($out == ' ') ? '' : $out;
 	}
 	
 	
@@ -2223,18 +2155,18 @@ class arr{
 	public static function assoc2json($opt){
 		$out = '{%json%}';
 		$arr = array();
-		if(is_array($opt) && count($opt) > 0){
-			foreach($opt as $k => $val)
-				$arr[] = '"'.$k.'":"'.$val.'"';
+		if (is_array($opt) && count($opt) > 0) {
+			foreach ($opt as $k => $val)
+				$arr[] = '"' . $k . '":"' . $val . '"';
 		}
-		return count($arr) ? str_replace('%json%', implode(',',$arr), $out) : '{}';
+        return count($arr)
+            ? str_replace(
+                '%json%',
+                implode(',', $arr),
+                $out
+            )
+            : '{}';
 	}
-	
-	
-	
-			
-			
-
 }
 
 
@@ -2263,110 +2195,95 @@ class html{
 	);		
 	private static $default_dtd;
 
-	private function __construct(){}
-	
-	
-		
-	private static function get_instance() {
-		
-		if ( empty( self::$instance ) ) {
+    private function __construct(){}
+    	
+	private static function get_instance() {	
+		if (empty(self::$instance)) {
 			self::$instance = new html();
 		}
 		return self::$instance;
 	}
 	
-	public static function tag($name, $in=false, $args=false){
-
-		$vals = explode('_',$name);
+	public static function tag($name, $in = false, $args = false){
+		$vals = explode('_', $name);
 		$ret = '';
-		//if($args)$in = $args[0];
-		//echo $vals[0].'<br />';
-		switch(count($vals)){
-			case 0:return; break;
+		switch (count($vals)) {
+			case 0: return; break;
 			case 1:
-			//	echo $vals[0];
-				if(in_array($vals[0], self::$tags)){
+				if (in_array($vals[0], self::$tags)) {
 					$ag = arr::assoc2attrib($args);
-					
-					
-					$ret.= $in?'<'.$vals[0].$ag.'>'.$in.'</'.$vals[0].'>' : '<'.$vals[0].$ag.'/>';
+                    $ret .= $in
+                        ? '<' . $vals[0] . $ag . '>' . $in . '</' . $vals[0] . '>'
+                        : '<' . $vals[0] . $ag . '/>';
 				}
 			break;
 			case 2:
 				list($tag, $action) = $vals;
-				//echo $tag.'<br /><br />';
-				//print_r(self::$tags);
-				if(in_array($tag, self::$tags)){
-					switch($action){
+				if (in_array($tag, self::$tags)) {
+					switch ($action) {
 						case 'start':
-							$ret.= '<'.$tag.arr::assoc2attrib($args).'>';
+							$ret .= '<' . $tag.arr::assoc2attrib($args) . '>';
 						break;
 						case 'end':
-							$ret.= '</'.$tag.'>';
+							$ret .= '</' . $tag . '>';
 						break;
 					}
 				}
 			break;
-			default:return;break;
+			default: return; break;
 		}
-		//echo $ret;
 		return $ret;
-		//echo $name;
 	}
 	
 	public static function esplicit_script($content, $type, $out = false){
 		self::get_instance($out);
-
-		switch($type){
+		switch ($type) {
 			case 'js':
-				$ret = '<script type="text/javascript">'.$content.'</script>';
+				$ret = '<script type="text/javascript">' . $content . '</script>';
 			break;
 			case 'css':
-				$ret = '<style type="text/css">'.$content.'</style>';
+				$ret = '<style type="text/css">' . $content . '</style>';
 			break;
 		}
-		if($ret && self::$out) echo $ret;
-
+		if ($ret && self::$out) echo $ret;
 		return $ret;
     }
     
     public function implicit_script($url, $out = false) {
         self::get_instance($out);
-        $ret = '<script type="text/javascript" src="'.$url.'"></script>';
-		if($ret && self::$out) echo $ret;
+        $ret = '<script type="text/javascript" src="' . $url . '"></script>';
+		if ($ret && self::$out) echo $ret;
 		return $ret;
     }
-	
 }
 
 
 
 class curl {
 
-	public static function get($uri, $options=array()){
-		
-		
+	public static function get($uri, $options = array()){
 		$ch = curl_init();
 		$sname = session_name();
 		$sid = session_id();
 
-		$strCookie = $sname.'=' . (array_key_exists($sname, $_COOKIE)?$_COOKIE[$sname] : $sid) . '; path=/';
+        $strCookie = $sname
+            . '='
+            . (array_key_exists($sname, $_COOKIE) ? $_COOKIE[$sname] : $sid)
+            . '; path=/';
 
 		session_write_close();
 
 		$curl_opts = array(
 			CURLOPT_URL => $uri,
-			CURLOPT_HEADER=> false,
-			CURLOPT_COOKIE=>$strCookie,
-			CURLOPT_RETURNTRANSFER=>true,
-			CURLOPT_ENCODING =>"gzip"
+			CURLOPT_HEADER => false,
+			CURLOPT_COOKIE => $strCookie,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => "gzip"
 		);
 		
-		if(count($options)){
-			foreach($options as $k =>$o)$curl_opts[$k]=$o;
-			//utility::print_d($curl_opts);
-			//die();
-		}
+		if (count($options))
+            foreach ($options as $k => $o)
+                $curl_opts[$k]=$o;
 		
 		curl_setopt_array(
 			$ch,
@@ -2375,10 +2292,7 @@ class curl {
 		$ret = curl_exec($ch);
 		curl_close($ch);
 		return $ret;
-	}
-
-
-
+    }
 }
 
 
