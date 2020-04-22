@@ -9,6 +9,7 @@ $sample_code = '';
 <?php
 include(realpath(dirname(__FILE__).'/../gmaps3simple.class.php'));
 $gmaps = new gmaps3simple(array('id'=>'map_new','cache'=>false));
+include(realpath(dirname(__FILE__).'/apikey.php')); // runs $gmaps->set_api_key('A_VALID_API_KEY');
 
 $gmaps->center_point('Padova, Italia');
 

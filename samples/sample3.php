@@ -77,7 +77,7 @@ $gmaps = new gmaps3simple(
 		'cache'=>false // this is the default, You can skip that
 	)
 );
-include(realpath(dirname(__FILE__).'/apikey.php'));
+include(realpath(dirname(__FILE__).'/apikey.php')); // runs $gmaps->set_api_key('A_VALID_API_KEY');
 //if not set ROADMAP is used
 $gmaps->set_map_genre('HYBRID'); 
 

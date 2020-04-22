@@ -56,7 +56,7 @@ $gmaps = new gmaps3simple(
 		'cache'=>false
 	)
 );
-include(realpath(dirname(__FILE__).'/apikey.php'));
+include(realpath(dirname(__FILE__).'/apikey.php')); // runs $gmaps->set_api_key('A_VALID_API_KEY');
 $gmaps->center_point('Padova, Italia');
 
 $gmaps->edit_panel(

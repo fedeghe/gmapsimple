@@ -106,7 +106,7 @@ $gmaps = new gmaps3simple(
 		'cache'=>true
 	)
 );
-include(realpath(dirname(__FILE__).'/apikey.php'));
+include(realpath(dirname(__FILE__).'/apikey.php')); // runs $gmaps->set_api_key('A_VALID_API_KEY');
 
 $gmaps->edit_panel(
 	array(

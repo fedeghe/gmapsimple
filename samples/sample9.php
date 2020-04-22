@@ -98,7 +98,7 @@ $gmaps = new gmaps3simple(
 		'cache'=>false
 	)
 );
-include(realpath(dirname(__FILE__).'/apikey.php'));
+include(realpath(dirname(__FILE__).'/apikey.php')); // runs $gmaps->set_api_key('A_VALID_API_KEY');
 $gmaps->center_point('Roma, Italia');
 $gmaps->set_size(500, 400);
 $gmaps->limit_baloons_to(2);
