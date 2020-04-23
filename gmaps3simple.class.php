@@ -80,12 +80,18 @@ class gmaps3simple{
 	
     private $center_after_geo = false;
     private $sensor = false;
-	
+    private $debug_section = [];
+    private function debug($msg) {
+        $this->debug[] = $msg;
+    }
+    private function write_debug() {
+        return "\n/*\n" . print_r($this->debug, true). "\n*/\n";
+    }
 	
 	//libraries
 	private $load_places = false;
 
-	private $base_script = '://maps.googleapis.com/maps/api/js?key=%API_KEY%';
+	private $base_script = 'https://maps.googleapis.com/maps/api/js?key=%API_KEY%';
     private $geo_code = 'https://maps.googleapis.com/maps/api/geocode/json?address=%address%&key=%API_KEY%';	
     private $distance_script = 'https://maps.googleapis.com/maps/api/distancematrix/json?key=%API_KEY%&origins=%FROM%&destinations=%TO%&mode=%MODE%&language=en-EN';
 
@@ -277,7 +283,7 @@ class gmaps3simple{
         $this->map_styles = array_key_exists('styles', $options) ? $options['styles'] : array();
         
         $this->sensor = array_key_exists('sensor', $options) ? $options['sensor'] : false;
-		
+		$this->debug(print_r($this->options, true));
 		$this->script_hash = $this->hash_defaults;
 		
 		if (array_key_exists('hash', $options) && is_array($options['hash'])) {
@@ -1256,18 +1262,37 @@ class gmaps3simple{
 		if($this->sensor == 'true'){
 			$head.='
 			if(navigator.geolocation) {
-				browserSupportFlag = true;
-				navigator.geolocation.getCurrentPosition(
-					function(position) {
-						initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-						'.($this->center_after_geo ? $this->map_id.'.setCenter(initialLocation);' : '').'
-					},
-					function() {
-						handleNoGeolocation(browserSupportFlag);
-					}
-				);
-			}
-			var initialLocation=false;
+                browserSupportFlag = true;
+                
+				navigator.geolocation.getCurrentPosition(function(position) {
+                    debugger;
+                    initialLocation = new google.maps.LatLng( position.coords.latitude,position.coords.longitude) ;
+                    '.($this->center_after_geo ? $this->map_id.'.setCenter(initialLocation);' : '').'
+                },
+                function() {
+                    handleNoGeolocation(browserSupportFlag);
+                });
+            }
+            // if (navigator.geolocation) {
+            //     navigator.geolocation.getCurrentPosition(function(position) {
+            //         var pos = {
+            //             lat: position.coords.latitude,
+            //             lng: position.coords.longitude
+            //         };
+                    
+            //         infoWindow.setPosition(pos);
+            //         infoWindow.setContent("Location found.");
+            //         infoWindow.open(map);
+            //         map.setCenter(pos);
+            //     }, function() {
+            //         handleLocationError(true, infoWindow, map.getCenter());
+            //     });
+            // }
+
+
+
+
+			
 			var siberia = new google.maps.LatLng(60, 105);
 			var newyork = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
 			var get_initialLocation = function(){return initialLocation;};
@@ -1521,6 +1546,7 @@ class gmaps3simple{
 		$this->add_helper('elevation');
 		
 		$this->out_js='
+			'.$this->write_debug().'
 			'.$this->head().'
 			var initialize = function() {
 				'.str_replace('%map%' , $this->map_id, $this->write_helpers_functions()).'
@@ -2055,7 +2081,7 @@ class gmaps3simple{
 		if (array_key_exists('libraries', $this->script_hash)) 
             $this->script_hash['libraries'] = implode(',', $this->script_hash['libraries']);
         
-		$out.= html::implicit_script($this->proto . $this->base_script . arr::arr2get($this->script_hash));
+		$out.= html::implicit_script($this->base_script . arr::arr2get($this->script_hash));
 		$out.= html::esplicit_script($this->out_js, 'js');
 		
 		if ($this->use_jQuery) {
