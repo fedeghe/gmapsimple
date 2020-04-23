@@ -78,7 +78,8 @@ class gmaps3simple{
 	private $api_key; 
 	
 	
-	private $center_after_geo = false;
+    private $center_after_geo = false;
+    private $sensor = false;
 	
 	
 	//libraries
@@ -86,7 +87,7 @@ class gmaps3simple{
 
 	private $base_script = '://maps.googleapis.com/maps/api/js?key=%API_KEY%';
     private $geo_code = 'https://maps.googleapis.com/maps/api/geocode/json?address=%address%&key=%API_KEY%';	
-    private $distance_script = 'https://maps.googleapis.com/maps/api/distancematrix/json?key=%API_KEY%&origins=%FROM%&destinations=%TO%&mode=%MODE%&language=en-EN&sensor=false';
+    private $distance_script = 'https://maps.googleapis.com/maps/api/distancematrix/json?key=%API_KEY%&origins=%FROM%&destinations=%TO%&mode=%MODE%&language=en-EN';
 
 	private $map_genres = array('ROADMAP','SATELLITE','HYBRID','TERRAIN');
 	private $panel_elements = array(
@@ -122,7 +123,7 @@ class gmaps3simple{
 	 * @var array
 	 */
 	private $hash_defaults = array(
-		'sensor' => false,
+		'language' => 'EN',
 		'region' => false
 	);
 	
@@ -257,7 +258,7 @@ class gmaps3simple{
 		if (array_key_exists('cache', $options) && $options['cache']) {
 			$this->cache = true;
 			$this->check_cache();
-			if ($this->cached_file_content)return true;
+			if ($this->cached_file_content) return true;
 		}
 		
 		$this->map_id = $options['id'];
@@ -268,11 +269,14 @@ class gmaps3simple{
 		//if(array_key_exists('libraries', $options) && array_key_exists('places', $options['libraries']))$this->load_places = true;
 		
 		$this->out_style = html::esplicit_script('#'.$this->map_id.' { height: 100% }', 'css');
-		
+
+
 		//set map options
 		$this->map_options = array_key_exists('options', $options) ? $options['options'] : array();
 		
-		$this->map_styles = array_key_exists('styles', $options) ? $options['styles'] : array();
+        $this->map_styles = array_key_exists('styles', $options) ? $options['styles'] : array();
+        
+        $this->sensor = array_key_exists('sensor', $options) ? $options['sensor'] : false;
 		
 		$this->script_hash = $this->hash_defaults;
 		
@@ -284,11 +288,11 @@ class gmaps3simple{
 		}
 
 		//check center user will
-		if ($this->script_hash['sensor'] == 'center') {
+		if ($this->sensor == 'center') {
 			$this->center_after_geo = true;
 		}
 		//rewrite sensor to string
-		$this->script_hash['sensor'] = $this->script_hash['sensor'] ? 'true' : 'false';
+		
 		
 		$this->loaded_libs = array_key_exists('libraries', $this->script_hash) ? $this->script_hash['libraries'] : array();
 
@@ -1249,7 +1253,7 @@ class gmaps3simple{
 		if($this->cached_file_content)return;
 		$head = 'var initialLocation; var browserSupportFlag = new Boolean(); '.$this->write_one_baloon();
 		//is a string
-		if($this->script_hash['sensor'] == 'true'){
+		if($this->sensor == 'true'){
 			$head.='
 			if(navigator.geolocation) {
 				browserSupportFlag = true;
@@ -1526,7 +1530,6 @@ class gmaps3simple{
 					center: '.$this->center_point.',
 					mapTypeId: google.maps.MapTypeId.'.$this->map_genre.'
 					'.$this->write_optional_map_options().'
-					
 				};
 				
 				'.$this->write_map_styles().'
@@ -2048,9 +2051,6 @@ class gmaps3simple{
         foreach ($this->script_hash as $k => $s)
             if ($s==false)
                 unset($this->script_hash[$k]);
-		
-		
-		
 		
 		if (array_key_exists('libraries', $this->script_hash)) 
             $this->script_hash['libraries'] = implode(',', $this->script_hash['libraries']);
