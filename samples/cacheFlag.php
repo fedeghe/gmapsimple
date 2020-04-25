@@ -1,2 +1,2 @@
 <?php
-$cache = true;
+$cache = $onJmvc;

@@ -1,9 +1,5 @@
 <?php
-define('BASE_URL', 'https://www.jmvc.org/gmaps3simple/samples/');
-
-if(isSet($_GET['id']) && intval($_GET['id'])>0  && file_exists('sample'.intval($_GET['id']).'.php') ){ 
-	header('Location: '.BASE_URL.'sample'.intval($_GET['id']).'.php');
-}
+include(realpath(dirname(__FILE__).'/tpl_head_redirect.php'));
 ?>
 <!DOCTYPE html>
 <html>
