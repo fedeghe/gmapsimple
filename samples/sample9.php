@@ -53,9 +53,9 @@ clicked baloon zindex will be automatically maximized
 $gmaps->limit_baloons_to(2);
 // a polyline
 $gmaps->add_polyline(array(
-		array(\'label1\',\'albignasego\', array(\'title\'=>\'casa\', \'baloon\'=>\'&hearts;  home  %LOCATION%<\')),
-		array(\'label2\',\'verona\', array(\'title\'=>\'zeppelin\', \'baloon\'=>\'<strong>%LAT% %LON%</strong>\')),
-		array(\'label3\',\'roma\', array(\'title\'=>\'aquarius\', \'baloon\'=>\'hei U!  %ELEVATION%< \')),
+    array(\'label1\',\'albignasego, Italia\', array(\'title\'=>\'casa\', \'baloon\'=>\'&hearts; home %LOCATION%\')),
+    array(\'label2\',\'Verona, Italia\', array(\'title\'=>\'just a title\', \'baloon\'=>\'<strong>%LAT% %LON%</strong>\')),
+    array(\'label3\',\'Roma, Italia\', array(\'title\'=>\'just a title\', \'baloon\'=>\'hei U! %ELEVATION%\')),
 	),
 	array(
 		\'strokeColor\'=> "#00ff00",
@@ -103,9 +103,9 @@ $gmaps->set_size(500, 400);
 $gmaps->limit_baloons_to(2);
 $gmaps->center_on_click(true);
 $gmaps->add_polyline(array(
-		array('label1','albignasego', array('title'=>'casa', 'baloon'=>'&hearts; home %LOCATION%')),
-		array('label2','verona', array('title'=>'just a title', 'baloon'=>'<strong>%LAT% %LON%</strong>')),
-		array('label3','roma', array('title'=>'just a title', 'baloon'=>'hei U! %ELEVATION%')),
+		array('label1','albignasego, Italia', array('title'=>'casa', 'baloon'=>'&hearts; home %LOCATION%')),
+		array('label2','Verona, Italia', array('title'=>'just a title', 'baloon'=>'<strong>%LAT% %LON%</strong>')),
+		array('label3','Roma, Italia', array('title'=>'just a title', 'baloon'=>'hei U! %ELEVATION%')),
 	),
 	array(
 		'strokeColor'=> "#ff0000",
