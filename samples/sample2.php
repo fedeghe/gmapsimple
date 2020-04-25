@@ -57,18 +57,19 @@ $gmaps = new gmaps3simple(
 	)
 );
 include(realpath(dirname(__FILE__).'/apikey.php')); // runs $gmaps->set_api_key('A_VALID_API_KEY');
-$gmaps->center_point('verona, Italia');
-$gmaps->add_point(
-	'padova',
-	'padova',
-	array(
-		'baloon'=>'<div>Latitude: %LAT% <br /> Longitude: %LON%<br />Elevation: %ELEVATION%</div> ',
-		'zindex'=>3,
-		'title'=>'just the title',
-	)
-);
-$gmaps->set_size(500, 400);
-$gmaps->set_zoom_level(7);
+$gmaps->center_point('verona, Italia')
+    ->add_point(
+        'padova',
+        'padova',
+        array(
+            'baloon' => '<div>Latitude: %LAT% <br /> Longitude: %LON%<br />Elevation: %ELEVATION%</div> ',
+            'zindex' => 3,
+            'title' => 'just the title',
+        )
+    )
+    ->set_size(500, 400)
+    ->set_zoom_level(7);
+    
 $script = $gmaps->render();
 
 include('tpl.php');

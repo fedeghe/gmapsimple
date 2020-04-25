@@ -103,7 +103,7 @@ $gmaps = new gmaps3simple(
 				'element' => 'geometry'
 			)
 		),
-		'cache' => true
+		'cache' => false
 	)
 );
 include(realpath(dirname(__FILE__).'/apikey.php')); // runs $gmaps->set_api_key('A_VALID_API_KEY');

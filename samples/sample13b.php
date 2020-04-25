@@ -50,7 +50,7 @@ $gmaps = new gmaps3simple(array(
             'places'
         )
     ),
-    'cache' => true
+    'cache' => false
 ));
 include(realpath(dirname(__FILE__).'/apikey.php')); // runs $gmaps->set_api_key('A_VALID_API_KEY');
 $gmaps->edit_panel(

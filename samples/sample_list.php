@@ -9,10 +9,8 @@ $labels = array(
 	'Panel setting'=>'sample6.php',
 	'More UI settings'=>'sample6b.php',
 	'Trace paths'=>'sample7.php',
-	//'Route options'=>'sample8.php',
 	'Add polylines & polygons'=>'sample9.php',
 	'Add circles and rectangles'=>'sample10.php',
-	//'Areas, distances, and more options (soon available)'=>'sample1.php',
 	'Add Panoramio Layer'=>'sample11.php',
 	'Add Flickr Layer'=>'sample11b.php',
 	'More layers: traffic, bycicle'=>'sample12.php',
@@ -50,6 +48,8 @@ foreach($pages as $label => $url){
 }
 $select .= '<option value="">more to come!!! :D </option>';
 $select .='</select>';
+
+// echo '<pre>' . print_r($_SERVER, true) . '</pre>';
 
 ?>
 <span style="font-size: 15px">List of samples:</span><?php echo $select; ?>

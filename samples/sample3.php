@@ -74,7 +74,7 @@ include(realpath(dirname(__FILE__).'/../gmaps3simple.class.php'));
 $gmaps = new gmaps3simple(
 	array(
 		'id' => 'map_new',
-		'cache' => true // this is the default, You can skip that
+		'cache' => false // this is the default, You can skip that
 	)
 );
 include(realpath(dirname(__FILE__).'/apikey.php')); // runs $gmaps->set_api_key('A_VALID_API_KEY');
