@@ -1,5 +1,5 @@
 <?php
-define('BASE_URL', '/samples/');
+define('BASE_URL', 'https://www.jmvc.org/gmaps3simple/samples/');
 if(isSet($_GET['id']) && intval($_GET['id'])>0  && file_exists('sample'.intval($_GET['id']).'.php') ){ 
 	header('Location: '.BASE_URL.'sample'.intval($_GET['id']).'.php');
 }
