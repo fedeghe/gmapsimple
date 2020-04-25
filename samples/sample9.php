@@ -66,13 +66,12 @@ $gmaps->add_polyline(array(
 //now add a polygon
 $gmaps->add_polygon(
 	array(
-		array(\'p1\',\'messina,sicilia\', array(\'title\'=>\'just a title\', \'baloon\'=>\'Messina : %LAT% %LON%\')),
-		array(\'p2\',\'palermo, sicilia\', array(\'title\'=>\'just a title\', \'baloon\'=>\'Palermo\')),
-		array(\'p3\',\'trapani,sicilia\', array(\'title\'=>\'just a title\', \'baloon\'=>\'Trapani\')),
-		array(\'p4\',\'marsala,sicilia\', array(\'title\'=>\'just a title\', \'baloon\'=>\'Marsala\')),
-		array(\'p5\',\'pachino,sicilia\', array(\'title\'=>\'just a title\', \'baloon\'=>\'Pachino\')),
-		array(\'p6\',\'siracusa,sicilia\', array(\'title\'=>\'just a title\', \'baloon\'=>\'Siracusa\')),
-		array(\'p7\',\'catania,sicilia\', array(\'title\'=>\'just a title\', \'baloon\'=>\'Catania\')),
+		array(\'p1\',\'messina,Italia\', array(\'title\'=>\'just a title\', \'baloon\'=>\'Messina : %LAT% %LON%\')),
+		array(\'p2\',\'palermo,Italia\', array(\'title\'=>\'just a title\', \'baloon\'=>\'Palermo %LOCATION%\')),
+		array(\'p3\',\'trapani,Italia\', array(\'title\'=>\'just a title\', \'baloon\'=>\'Trapani %ELEVATION%\')),
+		array(\'p4\',\'marsala,Italia\', array(\'title\'=>\'just a title\', \'baloon\'=>\'Marsala %LOCATION%\')),
+		array(\'p5\',\'pachino,Italia\', array(\'title\'=>\'just a title\', \'baloon\'=>\'Pachino %ELEVATION%\')),
+		array(\'p6\',\'siracusa,Italia\', array(\'title\'=>\'just a title\', \'baloon\'=>\'Siracusa %LOCATION%\'))
 	),
 	array(
 		\'strokeColor\'=> \'#00ff00\',
