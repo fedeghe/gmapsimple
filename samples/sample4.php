@@ -29,9 +29,7 @@ $gmaps->add_point(
 				\'baloon\'=>\'<div>Latitude: %LAT% <br /> Longitude: %LON%</div>\',
 				\'zindex\'=>3,
 				\'title\'=>\'just the title\',
-				\'onclick\'=>\'function(lat, lon){
-					document.getElementById("debug").innerHTML ="Lat: "+lat+"<br/>Lon: "+lon;
-				}\',
+				\'onclick\'=>\'function(lat, lon){	document.getElementById("debug").innerHTML ="Lat: "+lat+"<br/>Lon: "+lon;}\',
 				\'animation\'=>\'DROP\'
 			)
 		),
@@ -39,16 +37,14 @@ $gmaps->add_point(
 			\'riccione\',
 			\'riccione\',
 			array(
-				\'baloon\'=>\'<div>Cheers from Riccione !!! :D</div>\',
+				\'baloon\'=>\'<div>Cheers from %LOCATION% !!!<br /><br />:D<br /><br />drag me around!!<br />lat: %LAT%<br /> lon: %LON%}<br />elevation: %ELEVATION%</div>\',
 				\'zindex\'=>3,
-				\'title\'=>\'just the title\',
+				\'title\'=>\'drag me around\',
 				\'icon\'=>\'img/beachflag.png\',
 				\'icon_size\'=>\'20,32\',
 				\'shadow\'=>\'img/beachflag_shadow.png\',
 				\'shadow_size\'=>\'37,32\',
-				\'draggable\'=>\'function(lat,lon){
-					document.getElementById("debug").innerHTML ="DRAG END:<br />Lat: "+lat+"<br />Lon: "+lon;
-				}\',
+				\'draggable\'=>\'function(lat,lon){document.getElementById("debug").innerHTML ="DRAG END:<br />Lat: "+lat+"<br />Lon: "+lon;}\',
 			)
 		)
 	)
@@ -89,7 +85,7 @@ $gmaps->add_point(
 			'riccione',
 			'riccione',
 			array(
-				'baloon'=>'<div>Cheers from %LOCATION% !!!<br /><br />:D<br /><br />drag me around!! %LAT% %LON% <br />%ELEVATION%</div>',
+				'baloon'=>'<div>Cheers from %LOCATION% !!!<br /><br />:D<br /><br />drag me around!!<br />lat: %LAT%<br /> lon: %LON%}<br />elevation: %ELEVATION%</div>',
 				'zindex'=>3,
 				'title'=>'drag me around',
 				'icon'=>'img/beachflag.png',
