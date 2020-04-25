@@ -1,4 +1,4 @@
-### Gmaps3simple
+# Gmaps3simple
 
 Almost 10 years ago I developed a utility library to easily manage google maps with php.
 
@@ -10,3 +10,6 @@ $instance->set_api_key('YOUR_API_KEY')
 ```
 
 some of the features used in the sample are not working exactly as expected, but I plan to refactor that and maybe publish a brand new version.
+
+
+Get a quick look at some samples [here](https://www.jmvc.org/gmaps3simple)
