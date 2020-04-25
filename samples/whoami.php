@@ -6,7 +6,7 @@ $body = <<< EOF
 </div>
 <div class="author_info">
 	<p>Hi,<br />
-		my name is Federico Ghedina and I live in Italy.
+		my name is Federico Ghedina, Italian and I live in Berlin.
 		<br />
 		That class is an experimental approach to gain time working with Google Maps API v3.
 		<br />
