@@ -1418,7 +1418,7 @@ class gmaps3simple{
 							}
 							$p.='marker_'.$name.'.openInfoWindowTabsHtml(tabs_'.$name.');';
 						}else{
-*/							$baloon = $point['baloon'];
+*/							$baloon = str_replace('"', '\"', $point['baloon']);
 							$p.='content_'.$k.' = "'.$baloon.'";';
 							$p.=' var baloon_point_'.$k.'= new google.maps.InfoWindow({ content: content_'.$k.' });';
 						
