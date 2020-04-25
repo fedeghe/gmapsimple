@@ -1078,10 +1078,11 @@ class gmaps3simple{
 					$content = '';
 					switch(true){
 						case array_key_exists('baloon', $point['opts']):
+                            $point['opts']['baloon'] = str_replace(array('%LAT%', '%LON%'),array($point['coords']['lat'],$point['coords']['lon']), $point['opts']['baloon']);
+                            
 							$baloon_and_markers.= 'var in_baloon = \''.$point['opts']['baloon'].'\', lat = '.$point['coords']['lat'].', lon = '.$point['coords']['lon'].';';
 							
 							
-							$point['opts']['baloon'] = str_replace(array('%LAT%', '%LON%'),array($point['coords']['lat'],$point['coords']['lon']), $point['opts']['baloon']);
 							//$baloon_and_markers.=' var polygon_baloon_'.$name.$k.'= new google.maps.InfoWindow({ content: \''.$point['opts']['baloon'].'\' });';
 							$baloon_and_markers.=' var polygon_baloon_'.$name.$k.'= new google.maps.InfoWindow({ content: in_baloon });';
 							$baloon_and_markers.= $this->baloon_parse('in_baloon', 'lat', 'lon', 'polygon_baloon_'.$name.$k); 
