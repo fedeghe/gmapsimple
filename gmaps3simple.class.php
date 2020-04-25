@@ -1265,7 +1265,6 @@ class gmaps3simple{
                 browserSupportFlag = true;
                 
 				navigator.geolocation.getCurrentPosition(function(position) {
-                    debugger;
                     initialLocation = new google.maps.LatLng( position.coords.latitude,position.coords.longitude) ;
                     '.($this->center_after_geo ? $this->map_id.'.setCenter(initialLocation);' : '').'
                 },
@@ -1397,7 +1396,7 @@ class gmaps3simple{
 			
 			$p .= 'google.maps.event.addListener(
 						marker_point_'.$k.',
-						\'click\',
+						\'click\', // HERE' . "\n" . '
 						function() {
 							'.( $this->write_center_on_click('js_point_'.$k) ).'
 						});';
@@ -1431,7 +1430,7 @@ class gmaps3simple{
 						$p.= ' content_'.$k.' = "'.$baloon.'";';
 						$p.= ' var baloon_point_'.$k.'= new google.maps.InfoWindow({ content: content_'.$k.' });';
 						$p.= $this->only_one_baloon ? 'add_baloon(baloon_point_'.$k.');':'';
-						$p.= ' baloon_point_'.$k.'.setContent(content);';
+						$p.= ' baloon_point_'.$k.'.setContent(content_'.$k.');';
 						$p.= ' baloon_point_'.$k.'.open('.$this->map_id.',marker_point_'.$k.');';
 					break;
 				}
@@ -1530,7 +1529,7 @@ class gmaps3simple{
 		return $this;
 	}
 	private function write_center_on_click($location){
-		if($this->cached_file_content)return;
+		// if($this->cached_file_content)return;
 		return $this->do_center_on_click ? str_replace('%LOCATION%', $location, $this->do_center_on_click): '';
 	}
 	
