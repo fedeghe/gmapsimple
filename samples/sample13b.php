@@ -30,7 +30,7 @@ $gmaps->edit_panel(
 
 // this is the radius of research in meters -------------.	
 //                                                       v
-$gmaps->view_places(array(\'store\',\'massages\'), \'Miami\', 100, "<b>%name%</b><br />%formatted_address%");
+$gmaps->view_places(array(\'store\',\'massages\'), \'Miami\', 100, "name: %name%<br>rating: %rating%<br>url: %url%<br>website: %website%<br>html_attributions: %html_attributions%<br>formatted_phone_number: %formatted_phone_number%<br>formatted_address: %formatted_address%<br>types: %types%");
 
 $gmaps->center_point(\'Miami, Florida, United States\');
 
@@ -60,7 +60,7 @@ $gmaps->edit_panel(
 		'navigationControl' => array('show' => true)
 	)
 );
-$gmaps->view_places(array('store','massages'), 'Miami', 100, "<b>%name%</b><br />%formatted_address%");
+$gmaps->view_places(array('store','massages'), 'Miami', 100, "name: %name%<br>rating: %rating%<br>url: %url%<br>website: %website%<br>html_attributions: %html_attributions%<br>formatted_phone_number: %formatted_phone_number%<br>formatted_address: %formatted_address%<br>types: %types%");
 $gmaps->center_point('Miami,Florida, United States');
 $gmaps->set_size(800, 400);
 $gmaps->set_zoom_level(17);

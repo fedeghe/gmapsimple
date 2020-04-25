@@ -1,5 +1,5 @@
 <?php
-define('BASE_URL', 'http://www.freakstyle.it/classes/gmapsv3/samples/');
+define('BASE_URL', '/samples/');
 if(isSet($_GET['id']) && intval($_GET['id'])>0  && file_exists('sample'.intval($_GET['id']).'.php') ){ 
 	header('Location: '.BASE_URL.'sample'.intval($_GET['id']).'.php');
 }
@@ -8,7 +8,7 @@ if(isSet($_GET['id']) && intval($_GET['id'])>0  && file_exists('sample'.intval($
 <html>
 	<head>
 		<title><?php  echo $title;  ?></title>   
-		<link rel="stylesheet" type="text/css" href="http://www.freakstyle.it/classes/gmapsv3/css/style.css"/>
+		<link rel="stylesheet" type="text/css" href="css/style.css"/>
 	</head>
 	<body>
 		

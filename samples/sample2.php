@@ -51,7 +51,7 @@ echo $gmaps->render();
 include(realpath(dirname(__FILE__).'/../gmaps3simple.class.php'));
 $gmaps = new gmaps3simple(
 	array(
-		'id'=>'map_new',
+		'id' => 'map_new',
         'sensor' => 'true', // or 'center'
 		'cache' => false
 	)

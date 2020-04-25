@@ -75,48 +75,48 @@ echo $gmaps->render();
 include(realpath(dirname(__FILE__).'/../gmaps3simple.class.php'));
 $gmaps = new gmaps3simple(
 	array(
-		'id'=>'map_new',
-		'styles'=>array(
+		'id' => 'map_new',
+		'styles' => array(
 
-			'all'=>array(
-				'style'=>array(
-					'saturation'=>100,
-					'hue'=>"#000000",
-					'gamma'=>1.0
+			'all' => array(
+				'style' => array(
+					'saturation' => 100,
+					'hue' => "#000000",
+					'gamma' => 1.0
 				),
-				'element'=>'labels'
+				'element' => 'labels'
 			),
-			'road'=>array(
-				'style'=>array(
-					'saturation'=>-100,
-					'lightness'=>-100
+			'road' => array(
+				'style' => array(
+					'saturation' => -100,
+					'lightness' => -100
 				),
-				'element'=>'geometry'
+				'element' => 'geometry'
 			),
-			'water'=>array(
-				'style'=>array(
-					'lightness'=>0,
-					'saturation'=>100,
-					'hue'=>"#00ff00",
-					'gamma'=>1.0
+			'water' => array(
+				'style' => array(
+					'lightness' => 0,
+					'saturation' => 100,
+					'hue' => "#00ff00",
+					'gamma' => 1.0
 				),
-				'element'=>'geometry'
+				'element' => 'geometry'
 			)
 		),
-		'cache'=>true
+		'cache' => true
 	)
 );
 include(realpath(dirname(__FILE__).'/apikey.php')); // runs $gmaps->set_api_key('A_VALID_API_KEY');
 
 $gmaps->edit_panel(
 	array(
-		'panControl'=>array('show'=>true),
-		'zoomControl'=>array('show'=>true),
-		'mapTypeControl'=>array('show'=>true),
-		'scaleControl'=>array('show'=>true),
-		'streetViewControl'=>array('show'=>true),
-		'overviewMapControl'=>array('show'=>true),
-		'navigationControl'=>array('show'=>true)
+		'panControl' => array('show' => true),
+		'zoomControl' => array('show' => true),
+		'mapTypeControl' => array('show' => true),
+		'scaleControl' => array('show' => true),
+		'streetViewControl' => array('show' => true),
+		'overviewMapControl' => array('show' => true),
+		'navigationControl' => array('show' => true)
 	)
 );
 
@@ -131,15 +131,15 @@ $gmaps->add_point(
 	'padova,italia',
 	'padova',
 	array(
-		'baloon'=>'<div style="color:red">Here`s Padova !!! :D</div>',
-		'zindex'=>3,
-		'title'=>'just the title',
-		'icon'=>'img/beachflag.png',
-		'icon_size'=>'20,32',
-		'shadow'=>'img/beachflag_shadow.png',
-		'shadow_size'=>'37,32',
-		'draggable'=>'function(lat,lon){document.getElementById(\'debug\').innerHTML ="DRAG END:<br />Lat: "+lat+"<br />Lon: "+lon;}',
-		//'onclick'=>'function(lat,lng){reverse(lat, lng, function(resp){console.debug(resp);})}'
+		'baloon' => '<div style="color:red">Here`s Padova !!! :D</div>',
+		'zindex' => 3,
+		'title' => 'just the title',
+		'icon' => 'img/beachflag.png',
+		'icon_size' => '20,32',
+		'shadow' => 'img/beachflag_shadow.png',
+		'shadow_size' => '37,32',
+		'draggable' => 'function(lat,lon){document.getElementById(\'debug\').innerHTML ="DRAG END:<br />Lat: "+lat+"<br />Lon: "+lon;}',
+		//'onclick' => 'function(lat,lng){reverse(lat, lng, function(resp){console.debug(resp);})}'
 	)
 );
 $gmaps->set_size(500, 400);

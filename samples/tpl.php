@@ -18,7 +18,6 @@ if(isSet($_GET['id']) && intval($_GET['id'])>0  && file_exists('sample'.intval($
 		?>
 	</head>
 	<body>
-		
 		<?php include('sample_list.php'); ?>
 		<hr />
 		<h1><?php  echo $title;  ?></h1>   

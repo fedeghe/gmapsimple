@@ -2,7 +2,7 @@
 $title = 'About cache';
 $body = <<< EOF
 <div class="author_info">
-	<img align="left" src="http://www.freakstyle.it/classes/gmapsv3/samples/img/federico-ghedina.jpg">
+	<img align="left" src="img/federico-ghedina.jpg">
 </div>
 <div class="author_info">
 	<p>Hi,<br />
