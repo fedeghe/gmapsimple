@@ -56,10 +56,11 @@ echo $gmaps->render();
 ';
 
 include(realpath(dirname(__FILE__).'/../gmaps3simple.class.php'));
+include(realpath(dirname(__FILE__).'/cacheFlag.php'));
 $gmaps = new gmaps3simple(
 	array(
 		'id'=>'map_new',
-		'cache'=>false
+		'cache'=>$cache
 	)
 );
 include(realpath(dirname(__FILE__).'/apikey.php')); // runs $gmaps->set_api_key('A_VALID_API_KEY');
