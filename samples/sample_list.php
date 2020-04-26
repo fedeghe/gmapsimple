@@ -36,8 +36,12 @@ $i = 0;
 $prev = false;
 $next = false;
 
+$script_name = array_pop(explode('/', $_SERVER['SCRIPT_FILENAME']));
+
 foreach($pages as $label => $url){
-	$s = ((!$sel && $url==$_SERVER['SCRIPT_URI']) && $sel=true)? ' selected="selected"':false;
+    $url_script_name = array_pop(explode('/', $url));
+    
+	$s = (!$sel && $url_script_name==$script_name && $sel=true)? ' selected="selected"':false;
 	$select.='<option value="'.$url.'"'.$s.'>'.$label.'</option>';
 	if($s){
 		$urls = array_values($labels);
