@@ -97,7 +97,7 @@ class gmaps3simple{
 
 	private $map_genres = array('ROADMAP','SATELLITE','HYBRID','TERRAIN');
 	private $panel_elements = array(
-		'panControl' => array('show' => false, 'position' => false),
+		'fullscreenControl' => array('show' => false, 'position' => false),
 		'zoomControl' => array('show' => false, 'position'=>false, 'style' => false),
 		'mapTypeControl' => array('show' => false, 'position'=>false,'style' => false),
 		'scaleControl' => array('show' => false, 'position' => false),
@@ -380,13 +380,19 @@ class gmaps3simple{
 			
 			if (array_key_exists($name, $this->panel_elements)) {
 				$this->panel_elements[$name]['show'] = $opt['show'];
-				if (array_key_exists('position', $opt) && $opt['position'] && in_array($opt['position'], $this->panel_positions)) {
+                
+                if (
+                    array_key_exists('position', $opt)
+                    && $opt['position']
+                    && in_array($opt['position'], $this->panel_positions)
+                ) {
 					$this->panel_elements[$name]['position'] = 'google.maps.ControlPosition.'.$opt['position'];
-				}
+                }
+                
 				switch($name) {
 					case 'mapTypeControl':
 						if (array_key_exists('style', $opt) && in_array($opt['style'], array('HORIZONTAL_BAR','DROPDOWN_MENU','DEFAULT')))
-							$this->panel_elements[$name]['style'] = 'google.maps.MapTypeControlStyle.'.$opt['style'];
+                            $this->panel_elements[$name]['style'] = 'google.maps.MapTypeControlStyle.'.$opt['style'];
 					break;
 					case 'zoomControl':
 						if (array_key_exists('style', $opt) && in_array($opt['style'], array('SMALL','LARGE','DEFAULT')))
@@ -395,10 +401,6 @@ class gmaps3simple{
 					case 'overviewMapControl':
 						if (array_key_exists('opened', $opt) && $opt['opened'])
 							$this->panel_elements[$name]['opened'] = $opt['opened']?'true':'false';
-					break;
-					case 'navigationControl':
-						if (array_key_exists('style', $opt) && in_array($opt['style'], array('SMALL','DEFAULT')) )
-							$this->panel_elements[$name]['style'] = 'google.maps.NavigationControlStyle.'.$opt['style'];
 					break;
 					default:break;
 				}
@@ -932,39 +934,34 @@ class gmaps3simple{
 			
 			$scr =' var polyline_path_'.$k.' = [';
 			$points = array();
-			$p = '';
+			$polylines = '';
 			
 			foreach($path as $name => $point){
 				$points[]='new google.maps.LatLng('.$point['coords']['lat'].','.$point['coords']['lon'].')';
-				
-				
-				
+
 				//markers
-				$p.=' var polyline_point_'.$name.$k.'='.end($points).";\n";
-				$p.=' var polyline_marker_'.$name.$k.'= new google.maps.Marker({
+				$polylines.=' var polyline_point_'.$name.$k.'='.end($points).";\n";
+				$polylines.=' var polyline_marker_'.$name.$k.'= new google.maps.Marker({
 					  position: polyline_point_'.$name.$k.', 
 					  map: '.$this->map_id.',
 					  '.(array_key_exists('title', $point['opts'])?'title:"'.$point['opts']['title'].'"':'').'
 				  });'."\n";
-
-				
 				
 				//maybe a baloon is desired
 				if(array_key_exists('baloon', $point['opts']) || array_key_exists('openbaloon', $point['opts'])){
 
 					switch(true){
-					
 						case array_key_exists('baloon', $point['opts']):
 							$baloon = str_replace(array('%LAT%','%LON%'),array($point['coords']['lat'],$point['coords']['lon']),$point['opts']['baloon'] );
-							$p.='var in_baloon = \''.$baloon.'\',
+							$polylines.='var in_baloon = \''.$baloon.'\',
 								polyline_baloon_'.$name.$k.'= new google.maps.InfoWindow({ content: in_baloon }),
 								lat = '.$point['coords']['lat'].',
 								lon = '.$point['coords']['lon'].';'."\n";
-							 $p.= $this->baloon_parse('in_baloon', 'lat', 'lon', 'polyline_baloon_'.$name.$k);
+                                $polylines.= $this->baloon_parse('in_baloon', 'lat', 'lon', 'polyline_baloon_'.$name.$k);
 						
 							$op = ($this->only_one_baloon ? 'add_baloon(polyline_baloon_'.$name.$k.');':'');
 						
-							$p .= 'google.maps.event.addListener(
+							$polylines.= 'google.maps.event.addListener(
 								polyline_marker_'.$name.$k.',
 								\'click\',
 								function() {
@@ -975,9 +972,6 @@ class gmaps3simple{
 									'.$this->write_center_on_click('polyline_point_'.$name.$k).'	
 								}
 							);';
-						
-							
-							
 						break;
 					
 						case array_key_exists('openbaloon', $point['opts']['opts']):
@@ -988,17 +982,17 @@ class gmaps3simple{
                                 $point['opts']['openbaloon']
                             );
 							
-							$p.='var in_baloon = \''.$openbaloon.'\',
+							$polylines.='var in_baloon = \''.$openbaloon.'\',
 								polyline_baloon_'.$name.$k.'= new google.maps.InfoWindow({ content: in_baloon }),
 								lat = '.$point['coords']['lat'].',
 								lon = '.$point['coords']['lon'].';'."\n";
-							$p.= $this->baloon_parse('in_baloon', 'lat', 'lon', 'polyline_baloon_'.$name.$k);
+                            $polylines.= $this->baloon_parse('in_baloon', 'lat', 'lon', 'polyline_baloon_'.$name.$k);
 
 
 							$op =($this->only_one_baloon ? 'add_baloon(polyline_baloon_'.$name.$k.');':'');
 							
-							$p .= $op.'polyline_baloon_'.$name.$k.'.open('.$this->map_id.',polyline_marker_'.$name.$k.');'."\n";
-							$p .= 'google.maps.event.addListener(
+							$polylines.= $op.'polyline_baloon_'.$name.$k.'.open('.$this->map_id.',polyline_marker_'.$name.$k.');'."\n";
+							$polylines.= 'google.maps.event.addListener(
 								polyline_marker_'.$name.$k.',
 								\'click\',
 								function() {
@@ -1016,11 +1010,7 @@ class gmaps3simple{
 			$scr.='var polyline_inpath_'.$k.' = new google.maps.Polyline({path: polyline_path_'.$k.',strokeColor: "'.$style['strokeColor'].'",strokeOpacity: '.$style['strokeOpacity'].',strokeWeight: '.$style['strokeWeight'].'});
 				polyline_inpath_'.$k.'.setMap('.$this->map_id.');'."\n";
 			
-			$js.=$p;
-			
-			$js.=$scr;
-			
-			
+			$js.= $polylines . $scr;
 		}
 		return $js;
 	}
@@ -1050,9 +1040,6 @@ class gmaps3simple{
 			$in_baloon = $path['in_baloon'];
 			unset($path['in_baloon']);
 			
-			
-			
-			
 			$points = array();
 			
 			$baloon_and_markers = '';
@@ -1060,10 +1047,7 @@ class gmaps3simple{
 				$js.=' var polygon_js_point_'.$name.$k.'= new google.maps.LatLng('.$point['coords']['lat'].','.$point['coords']['lon'].');'."\n";
 				$points[]='polygon_js_point_'.$name.$k;
 				
-				
-				
 				//markers
-				
 				$baloon_and_markers.=' var polygon_marker_'.$name.'= new google.maps.Marker({
 					  position: new google.maps.LatLng('.$point['coords']['lat'].','.$point['coords']['lon'].'), 
 					  map: '.$this->map_id.',
@@ -1074,8 +1058,6 @@ class gmaps3simple{
 				//maybe a baloon is desired
 				if(array_key_exists('baloon', $point['opts']) || array_key_exists('openbaloon', $point['opts'])){
 					
-					
-					
 					//content for the baloon
 					$content = '';
 					switch(true){
@@ -1083,12 +1065,8 @@ class gmaps3simple{
                             $point['opts']['baloon'] = str_replace(array('%LAT%', '%LON%'),array($point['coords']['lat'],$point['coords']['lon']), $point['opts']['baloon']);
                             
 							$baloon_and_markers.= 'var in_baloon = \''.$point['opts']['baloon'].'\', lat = '.$point['coords']['lat'].', lon = '.$point['coords']['lon'].';';
-							
-							
-							//$baloon_and_markers.=' var polygon_baloon_'.$name.$k.'= new google.maps.InfoWindow({ content: \''.$point['opts']['baloon'].'\' });';
 							$baloon_and_markers.=' var polygon_baloon_'.$name.$k.'= new google.maps.InfoWindow({ content: in_baloon });';
 							$baloon_and_markers.= $this->baloon_parse('in_baloon', 'lat', 'lon', 'polygon_baloon_'.$name.$k); 
-							
 							
 							$op = ($this->only_one_baloon ? 'add_baloon(polygon_baloon_'.$name.$k.'); ':'');
 							$baloon_and_markers .= 'google.maps.event.addListener(
@@ -1115,19 +1093,11 @@ class gmaps3simple{
 									polygon_baloon_'.$name.$k.'.open('.$this->map_id.',polygon_marker_'.$name.');
 									'.$this->write_center_on_click('polygon_js_point_'.$name.$k).'
 								}
-							);'."\n";
-							
+							);'."\n";		
 						break;
 					}
-
-				}
-				
-				
+				}	
 			}
-			
-			
-			
-			
 			
 			// write down polygon points array
 			$script =' var polygon_poly_'.$k.' = ['.implode(',', $points).'];';
@@ -1154,9 +1124,6 @@ class gmaps3simple{
 				}else{
 					$in_baloon = str_replace('%AREA%', '', $in_baloon);
 				}
-				
-				
-				
 				$script.='
 				google.maps.event.addListener(polygon_inpoly_'.$k.', \'click\',
 					function (event) {
@@ -1204,35 +1171,22 @@ class gmaps3simple{
 	
 	private function write_places(){
 		if($this->cached_file_content)return;
-		$js='';
 		if(count($this->places)>0)
-			$js.=',types:[\''.implode("','", $this->places['types']).'\']';
-		
-		return $js;
+			return ',types:[\''.implode("','", $this->places['types']).'\']';
+		return '';
 	}
 	
 	private function write_panel(){
 		if($this->cached_file_content)return;
 		$tmp = array();
-		
-		
-		
 		foreach($this->panel_elements as $name => $opts){
-			
 			$elements =array();
-			
-			
 			$elements[] = $name.':'.($opts['show']?'true':'false');
-			
 			if($opts['show']==true){
-				
-				
 				$inner_els =array();
-				
 				$options = false;
 				if(array_key_exists('position', $opts) && $opts['position']){
 					$options=true;
-					
 					$inner_els[] = 'position:'.$opts['position'];
 				}
 				if(array_key_exists('style', $opts) && $opts['style']){
@@ -1242,19 +1196,13 @@ class gmaps3simple{
 				if(array_key_exists('opened', $opts) && $opts['opened']){
 					$options=true;
 					$inner_els[] = 'opened:'.$opts['opened'];
-				}
-				
+                }
 				if($options){
 					$elements[] = $name.'Options:{'.implode(',', $inner_els).'}';	
 				}
-				
-				
 			}
 			$tmp[]= implode(',', $elements);
-			
-			
 		}
-		
 		return implode(',', $tmp);
 	}
 	
@@ -1275,29 +1223,11 @@ class gmaps3simple{
                     handleNoGeolocation(browserSupportFlag);
                 });
             }
-            // if (navigator.geolocation) {
-            //     navigator.geolocation.getCurrentPosition(function(position) {
-            //         var pos = {
-            //             lat: position.coords.latitude,
-            //             lng: position.coords.longitude
-            //         };
-                    
-            //         infoWindow.setPosition(pos);
-            //         infoWindow.setContent("Location found.");
-            //         infoWindow.open(map);
-            //         map.setCenter(pos);
-            //     }, function() {
-            //         handleLocationError(true, infoWindow, map.getCenter());
-            //     });
-            // }
-
-
-
-
-			
-			var siberia = new google.maps.LatLng(60, 105);
-			var newyork = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
-			var get_initialLocation = function(){return initialLocation;};
+		
+            var newyork = new google.maps.LatLng(40.69847032728747, -73.9514422416687),
+                get_initialLocation = function(){
+                    return initialLocation;
+                };
 			function handleNoGeolocation(errorFlag) {
 				if (errorFlag == true) {
 					alert("Geolocation service failed.");
@@ -1330,11 +1260,11 @@ class gmaps3simple{
 	
 	// write down collected points
 	private function write_points(){
-		if($this->cached_file_content)return;
-		$p = '';
+		if ($this->cached_file_content) return;
+		$points = '';
 		$k=0;
 		$js_points=array();
-		foreach($this->points as $name => $point){
+		foreach ($this->points as $name => $point) {
 			$k++;
 			
 			//icon, shadow
@@ -1347,8 +1277,8 @@ class gmaps3simple{
 			$draggable = array_key_exists('draggable', $point) ? $point['draggable'] : false;
 			$onclick = array_key_exists('onclick', $point) ? $point['onclick'] : false;
 			
-			if($icon && $icon_size){
-				$p.='
+			if ($icon && $icon_size) {
+				$points.='
 				var img_point_'.$k.' = new google.maps.MarkerImage(\''.$icon.'\',
 					new google.maps.Size('.$icon_size[0].', '.$icon_size[1].'),
 					new google.maps.Point(0,0),
@@ -1356,8 +1286,8 @@ class gmaps3simple{
 				);
 				';				
 			}
-			if($shadow && $shadow_size){
-				$p.='
+			if ($shadow && $shadow_size) {
+				$points.='
 				var shad_point_'.$k.' = new google.maps.MarkerImage(\''.$shadow.'\',
 					new google.maps.Size('.$shadow_size[0].', '.$shadow_size[1].'),
 					new google.maps.Point(0,0),
@@ -1366,9 +1296,9 @@ class gmaps3simple{
 				';				
 			}
 			
-			$p .= 'var js_point_'.$k.' = new google.maps.LatLng('.$point['coords']['lat'].','.$point['coords']['lon'].');';
+			$points.= 'var js_point_'.$k.' = new google.maps.LatLng('.$point['coords']['lat'].','.$point['coords']['lon'].');';
 			
-			$p.=' var marker_point_'.$k.'= new google.maps.Marker({
+			$points.=' var marker_point_'.$k.'= new google.maps.Marker({
 					position: js_point_'.$k.', 
 					map: '.$this->map_id.'
 					'.(array_key_exists('title', $point)?',title:"'.$point['title'].'"':'').'
@@ -1381,8 +1311,8 @@ class gmaps3simple{
 				  });
 			';
 			
-			if($onclick){
-				$p.='
+			if ($onclick) {
+				$points.='
 					google.maps.event.addListener(
 						marker_point_'.$k.',
 						\'click\',
@@ -1397,7 +1327,7 @@ class gmaps3simple{
 			}
 			
 			
-			$p .= 'google.maps.event.addListener(
+			$points.= 'google.maps.event.addListener(
 						marker_point_'.$k.',
 						\'click\', // HERE' . "\n" . '
 						function() {
@@ -1405,10 +1335,10 @@ class gmaps3simple{
 						});';
 			
 			//maybe a baloon is desired
-			if(array_key_exists('baloon', $point) || array_key_exists('openbaloon', $point)){
+			if (array_key_exists('baloon', $point) || array_key_exists('openbaloon', $point)) {
 				$baloon = false;
-				$p.='var content_'.$k.' = "";';
-				switch(true){
+				$points.='var content_'.$k.' = "";';
+				switch (true) {
 					case array_key_exists('baloon', $point):
 						
 						//must wait for tabs implementation !!!
@@ -1421,23 +1351,23 @@ class gmaps3simple{
 							}
 							$p.='marker_'.$name.'.openInfoWindowTabsHtml(tabs_'.$name.');';
 						}else{
-*/							$baloon = str_replace('"', '\"', $point['baloon']);
-							$p.='content_'.$k.' = "'.$baloon.'";';
-							$p.=' var baloon_point_'.$k.'= new google.maps.InfoWindow({ content: content_'.$k.' });';
+                        */							
+                            $baloon = str_replace('"', '\"', $point['baloon']);
+                            $points.='content_'.$k.' = "'.$baloon.'";';
+							$points.=' var baloon_point_'.$k.'= new google.maps.InfoWindow({ content: content_'.$k.' });';
 						
 //						}
 					break;
 					case array_key_exists('openbaloon', $point):
-						
 						$baloon = $point['openbaloon'];
-						$p.= ' content_'.$k.' = "'.$baloon.'";';
-						$p.= ' var baloon_point_'.$k.'= new google.maps.InfoWindow({ content: content_'.$k.' });';
-						$p.= $this->only_one_baloon ? 'add_baloon(baloon_point_'.$k.');':'';
-						$p.= ' baloon_point_'.$k.'.setContent(content_'.$k.');';
-						$p.= ' baloon_point_'.$k.'.open('.$this->map_id.',marker_point_'.$k.');';
+						$points.= ' content_'.$k.' = "'.$baloon.'";';
+						$points.= ' var baloon_point_'.$k.'= new google.maps.InfoWindow({ content: content_'.$k.' });';
+						$points.= $this->only_one_baloon ? 'add_baloon(baloon_point_'.$k.');':'';
+						$points.= ' baloon_point_'.$k.'.setContent(content_'.$k.');';
+						$points.= ' baloon_point_'.$k.'.open('.$this->map_id.',marker_point_'.$k.');';
 					break;
 				}
-				$p .= 'google.maps.event.addListener(
+				$points.= 'google.maps.event.addListener(
 						marker_point_'.$k.',
 						\'click\',
 						function() {
@@ -1447,7 +1377,7 @@ class gmaps3simple{
 							'.($this->only_one_baloon ? 'add_baloon(baloon_point_'.$k.');':'').'
 							
 						});';
-				$p.=$draggable?'
+                $points.=$draggable?'
 					google.maps.event.addListener(
 						marker_point_'.$k.',
 						\'dragend\',
@@ -1466,7 +1396,7 @@ class gmaps3simple{
 			
 			
 		}
-		return $p;
+		return $points;
 	}
 	
 
@@ -1783,17 +1713,8 @@ class gmaps3simple{
 			'.$innerjs.'
 
 		})();';
-		$this->flickr_layer = $js;
-		
+		$this->flickr_layer = $js;	
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	public function add_panoramio_layer($opt=false){
 		if($this->cached_file_content)return;
@@ -1804,25 +1725,14 @@ class gmaps3simple{
 				(array_key_exists('tag', $opt)?'panoramioLayer.setTag(\''.$opt['tag'].'\');':'').
 				(array_key_exists('userid',$opt)?'panoramioLayer.setUserId(\''.$opt['userid'].'\');':'');
 		}
-		return $this;
-		
+		return $this;	
 	}
-	
-	
-	
-	
-	
-
-	
 	
 	public function add_user_script($raw_script){
 		if($this->cached_file_content)return;
 		$this->more_scripts[] = $raw_script;
 		return $this;
-	}
-	
-
-	
+    }
 	
 	public function get_distance($from, $to, $mode='bicycling'){
 		if($this->cached_file_content)return;
@@ -1869,7 +1779,6 @@ class gmaps3simple{
 		$this->polylines[] = $path;
 		return $this;
 	}
-	
 
 	public function set_route_panel($id){
 		$this->routes_panel = $id;
@@ -1880,11 +1789,8 @@ class gmaps3simple{
 		if($this->cached_file_content)return;
 		
 		$way_points = (array_key_exists('way_points', $opts) && is_array($opts['way_points'])) ? $opts['way_points'] : false;
-		
 		$avoids = (array_key_exists('avoids', $opts) && is_array($opts['avoids'])) ? $opts['avoids'] : false;
-		
 		$polyOpts = array_key_exists('stroke', $opts) ? ', polylineOptions: '.arr::assoc2json($opts['stroke']).' ' : false;
-		
 		$provideRouteAlternatives = array_key_exists('provideRouteAlternatives', $opts) ? $opts['provideRouteAlternatives']  :false;
 		
 		if (is_array($way_points)) {
@@ -1896,9 +1802,7 @@ class gmaps3simple{
 		}
 		
 		$mode = array_key_exists('mode', $opts) ? $opts['mode'] : 'DRIVING';
-		
 		$show_steps = array_key_exists('show_steps', $opts) ? $opts['show_steps'] : false;
-		
 		$drag_directions = array_key_exists('draggable_points', $opts) ? $opts['draggable_points'] : false;;
 		
 		if(!in_array($mode, array('DRIVING','WALKING','BICYCLING')))$mode = 'DRIVING';
