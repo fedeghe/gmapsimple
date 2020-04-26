@@ -28,7 +28,7 @@ foreach($labels as $label => $url){
 	$pages[($i++).'> '.$label] = BASE_URL.$url;
 }
 
-$select = '<select id="sample_select" style="font-size: 15px" onchange="if(this.value!==\'\')document.location.href=this.value;">';
+$select = '<select id="sample_select" onchange="if(this.value!==\'\')document.location.href=this.value;">';
 
 $select .= '<option value=""> &lArr; pick a sample &rArr; </option>';
 $sel =false;
@@ -56,7 +56,7 @@ $select .='</select>';
 // echo '<pre>' . print_r($_SERVER, true) . '</pre>';
 
 ?>
-<span style="font-size: 15px">List of samples:</span><?php echo $select; ?>
+<span>List of samples:</span><?php echo $select; ?>
 <?php
 if($prev || $next)echo '<br />';
 if($prev)echo '<a href="'.$prev.'">&lArr; previous sample</a>';

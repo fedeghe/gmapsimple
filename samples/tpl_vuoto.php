@@ -13,6 +13,6 @@ include(realpath(dirname(__FILE__).'/tpl_head_redirect.php'));
 		<hr />
 		<?php  echo $body;  ?> 
 		<hr />
-		<?php include('pp.php'); ?>
+		<?php include('paypal.php'); ?>
 	</body>
 </html>
