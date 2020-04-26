@@ -253,7 +253,9 @@ class gmaps3simple{
 	private $use_jQuery = false;
 
 	private function check_cache(){
-		$bt = debug_backtrace();
+        $bt = debug_backtrace();
+        // echo '<pre>' . print_r($bt, true) . '</pre>';
+        // die();
 		$this->may_cache_file = realpath(dirname(__FILE__)).'/cache.'.__CLASS__.'.'.crc32(file_get_contents($bt[1]['file'])).'.html';
 		if (file_exists($this->may_cache_file)) {
 			$this->cached_file_content = file_get_contents( $this->may_cache_file) ;
@@ -264,7 +266,7 @@ class gmaps3simple{
 		if (array_key_exists('cache', $options) && $options['cache']) {
 			$this->cache = true;
 			$this->check_cache();
-			if ($this->cached_file_content) return true;
+			if ($this->cached_file_content) return $this;
 		}
 		
 		$this->map_id = $options['id'];
@@ -324,7 +326,7 @@ class gmaps3simple{
 	public function set_size($w, $h){
 		$this->width = $w;
 		$this->height = $h;
-		if ($this->cached_file_content) return;
+		if ($this->cached_file_content) return $this;
 		if ($this->use_jQuery) {
 			$this->add_user_script("jQuery('#".$this->map_id."').css({width:'".$w."px', height:'".$h."px'});");
 		} else {
@@ -336,20 +338,20 @@ class gmaps3simple{
 	}
 	
 	public function set_map_genre($genre) {
-		if ($this->cached_file_content) return;
+		if ($this->cached_file_content) return $this;
 		if (in_array($genre, $this->map_genres)) $this->map_genre = $genre;
 		return $this;
 	}
 	
 	public function set_protocol($p) {
-		if ($this->cached_file_content) return;
+		if ($this->cached_file_content) return $this;
 		if (in_array($p,array('http','https'))) $this->proto = $p;
 		return $this;
 	}
 	
 
 	public function center_point($arr) {
-		if ($this->cached_file_content) return;
+		if ($this->cached_file_content) return $this;
 		if (!is_array($arr)) $arr = $this->address2coords ($arr);
 		
 		$this->center_point = 'new google.maps.LatLng('.$arr['lat'].','.$arr['lon'].')';
@@ -359,13 +361,13 @@ class gmaps3simple{
 	public function get_center_point(){	return $this->center_point;	}
 	
 	public function set_zoom_level($i){
-		if ($this->cached_file_content) return;
+		if ($this->cached_file_content) return $this;
 		if (is_int($i)) $this->zoom_level = intval($i);
 		return $this;
 	}
 	
 	public function edit_panel($p){
-		if ($this->cached_file_content) return;
+		if ($this->cached_file_content) return $this;
 		/*
 		'panControl'=>array('show'=>false,'position'=>false),
 		'zoomControl'=>array('show'=>false,'position'=>false,'style'=>false),
@@ -661,7 +663,7 @@ class gmaps3simple{
 	
 	// removes a point
 	public function remove_point($name){
-		if ($this->cached_file_content) return;
+		if ($this->cached_file_content) return $this;
 		if (array_key_exists($name, $this->points))
 			unset($this->points[$name]);
 		return $this;
@@ -674,7 +676,7 @@ class gmaps3simple{
 	}
     
     private function write_one_baloon(){
-		if ($this->cached_file_content) return;
+		if ($this->cached_file_content) return $this;
 		if ($this->only_one_baloon) {
 			return '
 				var opened_baloons = new Array();
@@ -709,13 +711,13 @@ class gmaps3simple{
 	}
 	
 	public function add_circle($circle){
-		if ($this->cached_file_content) return;
+		if ($this->cached_file_content) return $this;
 		$this->circles[] = $circle;
 		return $this;
     }
     
 	public function add_rectangle($rectangle){
-		if ($this->cached_file_content) return;
+		if ($this->cached_file_content) return $this;
 		$this->rectangles[] = $rectangle;
 		return $this;
 	}
@@ -1546,7 +1548,6 @@ class gmaps3simple{
 		$this->add_helper('elevation');
 		
 		$this->out_js='
-			'.$this->write_debug().'
 			'.$this->head().'
 			var initialize = function() {
 				'.str_replace('%map%' , $this->map_id, $this->write_helpers_functions()).'
@@ -1963,7 +1964,7 @@ class gmaps3simple{
 	
 	
 	public function add_polygon($path_points, $style, $in_baloon = false) {
-		if ($this->cached_file_content) return;
+		if ($this->cached_file_content) return $this;
 		$path = array(
 			'style' => $style,
 			'in_baloon' => $in_baloon
@@ -2051,7 +2052,7 @@ class gmaps3simple{
 	// 
 	// add a inner helper
 	public function add_helper($helpers){
-		if ($this->cached_file_content) return;
+		if ($this->cached_file_content) return $this;
 		if (is_array($helpers)) {
 			foreach ($helpers as $helper) $this->add_helper($helper);
 			return;
@@ -2061,7 +2062,7 @@ class gmaps3simple{
 	}
 	// remove a inner helper
 	public function remove_helper($helper) {
-		if ($this->cached_file_content) return;
+		if ($this->cached_file_content) return $this;
 		if (in_array($helper, $this->helpers)) unset($this->helpers[$helper]);
 		return $this;
     }
