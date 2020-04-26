@@ -60,7 +60,7 @@ echo $gmaps->render();
 ';
 include(realpath(dirname(__FILE__).'/../gmaps3simple.class.php'));
 include(realpath(dirname(__FILE__).'/cacheFlag.php'));
-$gmaps = new gmaps3simple(array('id'=>'map_new','cache'=>$cache));
+$gmaps = new gmaps3simple(array('id'=>'map_new','cache'=>true));
 include(realpath(dirname(__FILE__).'/apikey.php')); // runs $gmaps->set_api_key('A_VALID_API_KEY');
 $gmaps->center_point('Padova, Italia');
 $gmaps->add_inner_div(

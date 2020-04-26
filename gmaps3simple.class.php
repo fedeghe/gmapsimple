@@ -426,7 +426,7 @@ class gmaps3simple{
 		if($this->use_jQuery){
 			$js='if(jQuery("#'.$this->map_id.'").parent().css(\'position\')==\'relative\'){';
 			foreach($this->inner_divs as $id => $inner_div){
-                $js.='jQuery("#'.$this->map_id.'").parent().append(\''.
+                $js.='jQuery("#'.$this->map_id.'").append(\''.
                         html::tag('div',false,array('id'=>$inner_div['id'], 'style'=>arr::assoc2style($inner_div['style']) )).
                         '\');';
 
@@ -445,7 +445,7 @@ class gmaps3simple{
 				$js.='var tag = document.createElement(\'div\'); tag.setAttribute(\'id\', \''.$inner_div['id'].'\');';
 				//foreach($inner_div['style'] as $k =>$v)
 				$js.='tag.setAttribute(\'style\', \''.arr::assoc2style($inner_div['style']).'\');';
-                $js.='document.getElementById("'.$this->map_id.'").parentNode.appendChild(tag);';
+                $js.='document.getElementById("'.$this->map_id.'").appendChild(tag);';
                 // TODO check
                 // if($inner_div['content']){
 				// 	$js.='document.getElementById("'.$id.'").innerHMTL = "'.$inner_div['content'].'";';

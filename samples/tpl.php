@@ -21,7 +21,7 @@ include(realpath(dirname(__FILE__).'/tpl_head_redirect.php'));
 		<br />
 		<?php echo $script; ?>     
 		<?php echo isSet($before)?$before:''; ?> 
-		<div>
+		<div style="position:relative;">
 		   	<div id="map_new" style="width:500px; height:400px; border:3px solid black"></div>
 		</div>  
 		<div id="code_sample"><?php highlight_string('  
