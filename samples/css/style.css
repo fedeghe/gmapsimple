@@ -32,7 +32,16 @@ body{
     border-left:1px solid black;
     overflow:scroll;
 }
-
+#paypal {
+    font-size:0.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+}
+#paypal form {
+    margin-left:20px
+}
 a{
 	text-decoration: none;
 	color: inherit;

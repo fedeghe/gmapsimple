@@ -7,7 +7,7 @@ include(realpath(dirname(__FILE__).'/tpl_head_redirect.php'));
 		<title><?php  echo $title;  ?></title>   
 		<link rel="stylesheet" type="text/css" href="css/style.css"/>
 		<?php if(isSet($jquery) && $jquery){?>
-			<script type="text/javascript" src="jquery-1.6.4.min.js"></script>
+			<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 				
 		<?php
 		}
