@@ -1,19 +1,21 @@
 body{
 	font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
-    font-size: 26px;
+    font-size: 16px;
+    line-height: 32px;
 }
 #map_new{
     margin-right:10px;
     margin-bottom:10px;
 }
 #sample_select {
-    font-size:26px;
+    font-size:16px;
 }
 #code_sample{
 	padding:10px;
 	background-color:#eee;
 	margin-bottom:30px;
-	margin-left:-1px;
+    margin-left:-1px;
+    line-height:20px;
 	-moz-border-radius-topleft: 5px;
 	-moz-border-radius-topright:15px;
 	-moz-border-radius-bottomleft:5px;
@@ -33,7 +35,8 @@ body{
     overflow:scroll;
 }
 #paypal {
-    font-size:0.5em;
+    font-size:10px;
+    line-height:10px;
     display: flex;
     justify-content: center;
     align-items: center;

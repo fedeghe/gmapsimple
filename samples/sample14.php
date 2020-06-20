@@ -60,22 +60,34 @@ echo $gmaps->render();
 ';
 include(realpath(dirname(__FILE__).'/../gmaps3simple.class.php'));
 include(realpath(dirname(__FILE__).'/cacheFlag.php'));
-$gmaps = new gmaps3simple(array('id'=>'map_new','cache'=>true));
+$gmaps = new gmaps3simple(array('id'=>'map_new','cache'=>false));
 include(realpath(dirname(__FILE__).'/apikey.php')); // runs $gmaps->set_api_key('A_VALID_API_KEY');
 $gmaps->center_point('Padova, Italia');
 $gmaps->add_inner_div(
 	'info_div',
-	array('top'=>'10px', 'left'=>'10px', 'width'=>'150px', 	'height'=>'28px',
-		'border'=>'1px solid black', 'background-color'=>'#ffffaa',
-		'padding'=>'5px', 'font-size'=>'10px', 'font-family'=>'verdana,sans'
+	array(
+        'top'=>'10px', 'left'=>'10px',
+        'width'=>'150px', 	'min-height'=>'20px',
+        'border'=>'1px solid black',
+        'background-color'=>'#ffffaa',
+        'padding'=>'5px',
+        'font-size'=>'10px',
+        'line-height'=>'15px',
+        'font-family'=>'verdana,sans'
 	),
 	true
 );	
 $gmaps->add_inner_div(
 	'info_div2',
-	array('top'=>'10px', 'right'=>'10px', 'width'=>'150px', 	'height'=>'45px',
-		'border'=>'2px dotted red', 'background-color'=>'transparent',
-		'padding'=>'5px', 'font-size'=>'10px', 'font-family'=>'verdana,sans'
+	array(
+        'top'=>'10px', 'right'=>'10px',
+        'width'=>'150px', 'min-height'=>'20px',
+        'border'=>'2px dotted red',
+        'background-color'=>'transparent',
+        'padding'=>'5px',
+        'line-height'=>'15px',
+        'font-size'=>'10px',
+        'font-family'=>'verdana,sans'
 	)
 );	
 
