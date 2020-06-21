@@ -1245,9 +1245,17 @@ class gmaps3simple{
 		if($this->cached_file_content)return;
 		$request = $this->geo_code;
 		$req = str_replace(array('%address%', '%API_KEY%'), array(urlencode($address), $this->api_key), $request);
-		
-		$tmp = array();
-		$ret = curl::get($req);
+        
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $req);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_REFERER, 'https://jmvc.org');
+        $ret = curl_exec($ch);
+
+
+		// $tmp = array();
+		// $ret = curl::get($req);
 		$res = json_decode($ret, true);
 		if($res['status']==='OK'){
 			return array(
