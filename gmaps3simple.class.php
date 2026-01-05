@@ -2182,7 +2182,7 @@ class html{
 		return $ret;
     }
     
-    public function implicit_script($url, $out = false) {
+    public static function implicit_script($url, $out = false) {
         self::get_instance($out);
         $ret = '<script type="text/javascript" src="' . $url . '"></script>';
 		if ($ret && self::$out) echo $ret;
